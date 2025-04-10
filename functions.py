@@ -11,7 +11,11 @@ import numpy as np
 
 from typing import List, Dict
 
+from pypfopt import EfficientFrontier
+from pypfopt import risk_models
+from pypfopt import expected_returns
 
+import cvxpy as cp
 
 
 
@@ -139,3 +143,46 @@ def select_top_five(portfolios: List[Dict], metric: pd.Series) -> List[Dict]: #s
         top_five = dict(list(sorted_dict.items())[:5])
         top_five_dict[name] = top_five
     return top_five_dict
+
+
+
+
+
+
+
+
+
+
+
+
+#DATA PROCESSING AND PORTFOLIO GENERATION
+
+def optimize_portfolio(df_price, top_five:dict):
+    mu = expected_returns.mean_historical_return(df_price)  # Expected returns
+    S = risk_models.sample_cov(df_price)  # Covariance matrix
+
+
+    ef = EfficientFrontier(mu, S, solver=cp.CPLEX, weight_bounds=(0,1))
+
+    for ticker in top_five.keys():
+        ef.add_constraint(lambda w: w[ef.tickers.index(ticker)] >= 0.01)
+
+    booleans = cp.Variable(len(ef.tickers), boolean=True)
+    ef.add_constraint(lambda x: x <= booleans)
+    ef.add_constraint(lambda x: cp.sum(booleans) == 15)
+
+    weights = ef.min_volatility()
+    
+    selected = {ticker: weights[ticker] for ticker in ef.tickers if weights[ticker] >= 0.01}
+
+    return selected
+
+
+
+def run_min_variance(df_price, top_five):
+    results = dict()
+    for index, port in top_five.items():
+        result = optimize_portfolio(df_price, port)
+        results[index] = result
+    
+    return results
