@@ -17,6 +17,11 @@ from pypfopt import expected_returns
 
 import cvxpy as cp
 
+from tslearn.preprocessing import TimeSeriesScalerMeanVariance
+from tslearn.clustering import TimeSeriesKMeans
+
+
+import warnings
 
 
 
@@ -149,14 +154,24 @@ def select_top_five(portfolios: List[Dict], metric: pd.Series) -> List[Dict]: #s
 
 
 
+def join_stocks_crypto(crypto_df, stocks_df, mode = 'crypto_left'):
+    if mode == 'crypto_left':
+        joined_df = pd.merge(crypto_df, stocks_df, how='left', left_index=True, right_index=True)
+        joined_df = joined_df.ffill()
+        joined_df = joined_df.bfill()
+    elif mode == 'stocks_left':
+        joined_df = pd.merge(stocks_df, crypto_df, how='left', left_index=True, right_index=True)
+    else:
+        print('Unknown mode')
+        
+    return joined_df
 
 
 
 
-
-
-#DATA PROCESSING AND PORTFOLIO GENERATION
-
+#####################################################################
+############DATA PROCESSING AND PORTFOLIO GENERATION#################
+#####################################################################
 def optimize_portfolio(mu, S, top_five:dict):
 
     ef = EfficientFrontier(mu, S, solver=cp.CPLEX, weight_bounds=(0,1))
@@ -195,3 +210,48 @@ def run_min_variance(df_price, top_five, risk_model='sample_cov'):
         results[index] = result
     
     return results
+
+
+
+
+#####################################################################
+################################CLUSTERING###########################
+#####################################################################
+
+def run_kmeans_dtw(df_all_stocks, n_clus=3):
+    df_returns = df_all_stocks.pct_change().dropna()
+    data_kmeans = df_returns.T.values
+
+    tickers = list(df_all_stocks.columns)
+
+    data_scaled = TimeSeriesScalerMeanVariance().fit_transform(data_kmeans)
+
+    model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", random_state=0)
+    labels = model.fit_predict(data_scaled)
+
+    tickers_with_lables = {k: int(v) for k, v in zip(tickers, labels)}
+
+    warnings.simplefilter(action='ignore', category=FutureWarning) #supress warnings for cleanliness
+
+    return tickers_with_lables
+
+
+
+
+
+
+from tslearn.metrics import cdist_dtw
+
+def dtw_matrix_calc(df):
+    df_returns = df.pct_change().dropna()
+    X = df_returns.T.values
+
+    scaler = TimeSeriesScalerMeanVariance()
+    X_scaled = scaler.fit_transform(X)
+    
+    distance_matrix = cdist_dtw(X_scaled)
+
+    tickers = df_returns.columns  # or wherever your tickers are stored
+    dtw_matrix_df = pd.DataFrame(distance_matrix, index=tickers, columns=tickers)
+
+    return dtw_matrix_df
