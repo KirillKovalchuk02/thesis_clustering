@@ -18,3 +18,7 @@ venv312/
 
 # Ignore logs
 *.log
+
+
+
+min_variance_portfolio_jsons/
