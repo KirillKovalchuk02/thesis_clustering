@@ -172,8 +172,14 @@ def join_stocks_crypto(crypto_df, stocks_df, mode = 'crypto_left'):
 #####################################################################
 ############DATA PROCESSING AND PORTFOLIO GENERATION#################
 #####################################################################
-def optimize_portfolio(mu, S, top_five:dict):
 
+def log(msg):
+    print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
+
+
+def optimize_portfolio(mu, S, top_five:dict):
+    
+    log('calculating frontier')
     ef = EfficientFrontier(mu, S, solver=cp.CPLEX, weight_bounds=(0,1))
 
     for ticker in top_five.keys():
@@ -183,6 +189,7 @@ def optimize_portfolio(mu, S, top_five:dict):
     ef.add_constraint(lambda x: x <= booleans)
     ef.add_constraint(lambda x: cp.sum(booleans) == 15)
 
+    log('finding min_volatility')
     weights = ef.min_volatility()
     
     selected = {ticker: weights[ticker] for ticker in ef.tickers if weights[ticker] >= 0.01}
@@ -193,7 +200,7 @@ def optimize_portfolio(mu, S, top_five:dict):
 
 def run_min_variance(df_price, top_five, risk_model='sample_cov'):
     mu = expected_returns.mean_historical_return(df_price)  # Expected returns
-    
+    print('calculating the covariance matrix')
     if risk_model == 'sample_cov':
         S = risk_models.sample_cov(df_price)  # Covariance matrix
     elif risk_model == 'ledoit_wolf':
