@@ -157,10 +157,7 @@ def select_top_five(portfolios: List[Dict], metric: pd.Series) -> List[Dict]: #s
 
 #DATA PROCESSING AND PORTFOLIO GENERATION
 
-def optimize_portfolio(df_price, top_five:dict):
-    mu = expected_returns.mean_historical_return(df_price)  # Expected returns
-    S = risk_models.sample_cov(df_price)  # Covariance matrix
-
+def optimize_portfolio(mu, S, top_five:dict):
 
     ef = EfficientFrontier(mu, S, solver=cp.CPLEX, weight_bounds=(0,1))
 
@@ -179,10 +176,22 @@ def optimize_portfolio(df_price, top_five:dict):
 
 
 
-def run_min_variance(df_price, top_five):
+def run_min_variance(df_price, top_five, risk_model='sample_cov'):
+    mu = expected_returns.mean_historical_return(df_price)  # Expected returns
+    
+    if risk_model == 'sample_cov':
+        S = risk_models.sample_cov(df_price)  # Covariance matrix
+    elif risk_model == 'ledoit_wolf':
+        S = risk_models.CovarianceShrinkage(df_price).ledoit_wolf()
+    else:
+        print('Model not recognised')
+
+
+
     results = dict()
     for index, port in top_five.items():
-        result = optimize_portfolio(df_price, port)
+
+        result = optimize_portfolio(mu, S, port)
         results[index] = result
     
     return results
