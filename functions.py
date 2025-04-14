@@ -19,9 +19,13 @@ import cvxpy as cp
 
 from tslearn.preprocessing import TimeSeriesScalerMeanVariance
 from tslearn.clustering import TimeSeriesKMeans
+from tslearn.metrics import cdist_dtw
+from tslearn.clustering import KShape
 
+from sklearn.cluster import AgglomerativeClustering
 
 import warnings
+
 
 
 
@@ -225,29 +229,6 @@ def run_min_variance(df_price, top_five, risk_model='sample_cov'):
 ################################CLUSTERING###########################
 #####################################################################
 
-def run_kmeans_dtw(df_all_stocks, n_clus=3):
-    df_returns = df_all_stocks.pct_change().dropna()
-    data_kmeans = df_returns.T.values
-
-    tickers = list(df_all_stocks.columns)
-
-    data_scaled = TimeSeriesScalerMeanVariance().fit_transform(data_kmeans)
-
-    model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", random_state=0)
-    labels = model.fit_predict(data_scaled)
-
-    tickers_with_lables = {k: int(v) for k, v in zip(tickers, labels)}
-
-    warnings.simplefilter(action='ignore', category=FutureWarning) #supress warnings for cleanliness
-
-    return tickers_with_lables
-
-
-
-
-
-
-from tslearn.metrics import cdist_dtw
 
 def dtw_matrix_calc(df):
     df_returns = df.pct_change().dropna()
@@ -262,3 +243,75 @@ def dtw_matrix_calc(df):
     dtw_matrix_df = pd.DataFrame(distance_matrix, index=tickers, columns=tickers)
 
     return dtw_matrix_df
+
+
+
+
+# def run_k_model(df_all_stocks, n_clus=3, model_name='kmeans'):
+#     df_returns = df_all_stocks.pct_change().dropna()
+#     data_kmeans = df_returns.T.values
+
+#     tickers = list(df_all_stocks.columns)
+#     warnings.simplefilter(action='ignore', category=FutureWarning) #supress warnings for cleanliness
+
+#     data_scaled = TimeSeriesScalerMeanVariance().fit_transform(data_kmeans)
+
+#     if model_name == 'kmeans':
+#         model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", random_state=0)
+#     elif model_name == 'kshape':
+#         model = KShape(n_clusters=n_clus, random_state=0)
+
+#     labels = model.fit_predict(data_scaled)
+
+#     tickers_with_labels = {k: int(v) for k, v in zip(tickers, labels)}
+
+    
+
+#     return labels, tickers_with_labels
+
+
+
+
+# def run_ahc(dtw_matrix, n_clus=3, linkage='average'):
+    
+
+#     model = AgglomerativeClustering(
+#         n_clusters=n_clus,          
+#         metric='precomputed',     
+#         linkage=linkage  
+#     )
+
+#     labels = model.fit_predict(dtw_matrix)
+
+#     tickers_with_labels = {ticker: int(label) for ticker, label in zip(dtw_matrix.columns, labels)}
+
+#     return labels, tickers_with_labels
+
+
+
+
+def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single'):
+    df_returns = df.pct_change().dropna()
+    data_kmeans = df_returns.T.values
+
+    tickers = list(df.columns)
+    warnings.simplefilter(action='ignore', category=FutureWarning) #supress warnings for cleanliness
+
+    data_scaled = TimeSeriesScalerMeanVariance().fit_transform(data_kmeans)
+
+    if model_name == 'ahc':
+        dtw_matrix = dtw_matrix_calc(df)
+        model = AgglomerativeClustering(n_clusters=n_clus, metric='precomputed', linkage=linkage)
+        labels = model.fit_predict(dtw_matrix)
+    elif model_name == 'kmeans':
+        model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", random_state=0)
+        labels = model.fit_predict(data_scaled)
+    elif model_name == 'kshape':
+        model = KShape(n_clusters=n_clus, random_state=0)
+        labels = model.fit_predict(data_scaled)
+
+    tickers_with_labels = {k: int(v) for k, v in zip(tickers, labels)}
+
+    
+
+    return labels, tickers_with_labels
