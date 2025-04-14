@@ -23,6 +23,7 @@ from tslearn.metrics import cdist_dtw
 from tslearn.clustering import KShape
 
 from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics import silhouette_score
 
 import warnings
 
@@ -246,50 +247,6 @@ def dtw_matrix_calc(df):
 
 
 
-
-# def run_k_model(df_all_stocks, n_clus=3, model_name='kmeans'):
-#     df_returns = df_all_stocks.pct_change().dropna()
-#     data_kmeans = df_returns.T.values
-
-#     tickers = list(df_all_stocks.columns)
-#     warnings.simplefilter(action='ignore', category=FutureWarning) #supress warnings for cleanliness
-
-#     data_scaled = TimeSeriesScalerMeanVariance().fit_transform(data_kmeans)
-
-#     if model_name == 'kmeans':
-#         model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", random_state=0)
-#     elif model_name == 'kshape':
-#         model = KShape(n_clusters=n_clus, random_state=0)
-
-#     labels = model.fit_predict(data_scaled)
-
-#     tickers_with_labels = {k: int(v) for k, v in zip(tickers, labels)}
-
-    
-
-#     return labels, tickers_with_labels
-
-
-
-
-# def run_ahc(dtw_matrix, n_clus=3, linkage='average'):
-    
-
-#     model = AgglomerativeClustering(
-#         n_clusters=n_clus,          
-#         metric='precomputed',     
-#         linkage=linkage  
-#     )
-
-#     labels = model.fit_predict(dtw_matrix)
-
-#     tickers_with_labels = {ticker: int(label) for ticker, label in zip(dtw_matrix.columns, labels)}
-
-#     return labels, tickers_with_labels
-
-
-
-
 def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single'):
     df_returns = df.pct_change().dropna()
     data_kmeans = df_returns.T.values
@@ -315,3 +272,36 @@ def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single'):
     
 
     return labels, tickers_with_labels
+
+
+
+def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list=None):
+    dtw_matrix = dtw_matrix_calc(df)
+    silhouettes = []
+
+    if method == 'ahc':
+        if linkage_list is None:
+            raise ValueError("You must provide a list of linkages when using method='ahc'")
+        
+        for linkage in linkage_list:
+            for n in n_clusters_list:
+                labels, t = run_clustering_model(df, n_clus=n, model_name=method, linkage=linkage)
+                score = silhouette_score(dtw_matrix, labels, metric='precomputed')
+                silhouettes.append({
+                    'clusters': n,
+                    'silhouette_score': float(score),
+                    'method': method,
+                    'linkage': linkage
+                })
+    
+    else:
+        for n in n_clusters_list:
+            labels, t = run_clustering_model(df, n_clus=n, model_name=method)
+            score = silhouette_score(dtw_matrix, labels, metric='precomputed')
+            silhouettes.append({
+                'clusters': n,
+                'silhouette_score': float(score),
+                'method': method
+            })
+
+    return pd.DataFrame(silhouettes)
