@@ -269,10 +269,7 @@ def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single'):
 
     tickers_with_labels = {k: int(v) for k, v in zip(tickers, labels)}
 
-    
-
     return labels, tickers_with_labels
-
 
 
 def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list=None):
