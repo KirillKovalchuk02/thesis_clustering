@@ -21,9 +21,12 @@ from tslearn.preprocessing import TimeSeriesScalerMeanVariance
 from tslearn.clustering import TimeSeriesKMeans
 from tslearn.metrics import cdist_dtw
 from tslearn.clustering import KShape
+from tslearn.metrics import soft_dtw
+from sklearn.metrics.pairwise import pairwise_distances
 
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score
+
 
 import warnings
 
@@ -37,13 +40,13 @@ def get_tickers_stocks(min_dayvolume, exchanges, n):
     #markets = ['region'] + markets
     exchanges = ['exchange'] + exchanges
     
-    q = EquityQuery('and', [            #EquityQuery('is-in', markets), #remove the notion of a region
+    q = EquityQuery('and', [         
                   EquityQuery('is-in', exchanges),
                   EquityQuery('gt', ['dayvolume', min_dayvolume])
     ])
 
 
-    response = yf.screen(q, sortField = 'lastclosemarketcap.lasttwelvemonths', sortAsc = False, size=n) #select top 100 companies by market cap
+    response = yf.screen(q, sortField = 'lastclosemarketcap.lasttwelvemonths', sortAsc = False, size=n) #select top N companies by market cap
 
 
     selected_stocks = {}
@@ -89,7 +92,7 @@ def get_close_prices(ticker_list, period = 2, start = '2022-01-01'):
 
 
 
-def double_listed_stocks(full_stocks_dict):
+def double_listed_stocks(full_stocks_dict): #finds the doubly listed tickers in the dataframe
     
     company_names = []
     duplicated_tickers = []
@@ -140,7 +143,7 @@ def generate_rand_portfolios(n_reps:int, n_stocks:int, tickers:list):
 
 
 
-def select_top_five(portfolios: List[Dict], metric: pd.Series) -> List[Dict]: #sharpe_ratio = sharpe_ratio_calculation(df_all_stocks, rf_rate_annual = 0.02)
+def select_top_five(portfolios: List[Dict], metric: pd.Series) -> List[Dict]: #gets the top 5 stocks with the highest sharpe ratio
     top_five_dict = {}
     for name, port in portfolios.items():
         portfolio = port
@@ -159,7 +162,7 @@ def select_top_five(portfolios: List[Dict], metric: pd.Series) -> List[Dict]: #s
 
 
 
-def join_stocks_crypto(crypto_df, stocks_df, mode = 'crypto_left'):
+def join_stocks_crypto(crypto_df, stocks_df, mode = 'crypto_left'): #joins the full stock dataset with full cryptos dataset joining on the date
     if mode == 'crypto_left':
         joined_df = pd.merge(crypto_df, stocks_df, how='left', left_index=True, right_index=True)
         joined_df = joined_df.ffill()
@@ -182,13 +185,26 @@ def log(msg):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
 
 
-def optimize_portfolio(mu, S, top_five:dict):
+def optimize_portfolio(mu, S, top_five:dict, min_weight_for_top_five=0.01):
+    """ runs the portfolio optimization with the min variance as an objective 
     
+    parameters:
+    -----------
+        mu: Expected returns
+        S: Covariance Matrix
+        top_five: dict with the preselected stocks that must be included in the optimizaed portfolio 
+                    (their weights must be at least X% of the portfolio)
+        min_weight_for_top_five: minimum weight that top five preselected stocks must have
+    returns:
+    --------
+        DTW matrix in a dataframe format
+    """
+
     log('calculating frontier')
     ef = EfficientFrontier(mu, S, solver=cp.CPLEX, weight_bounds=(0,1))
 
     for ticker in top_five.keys():
-        ef.add_constraint(lambda w: w[ef.tickers.index(ticker)] >= 0.01)
+        ef.add_constraint(lambda w: w[ef.tickers.index(ticker)] >= min_weight_for_top_five)
 
     booleans = cp.Variable(len(ef.tickers), boolean=True)
     ef.add_constraint(lambda x: x <= booleans)
@@ -203,7 +219,20 @@ def optimize_portfolio(mu, S, top_five:dict):
 
 
 
-def run_min_variance(df_price, top_five, risk_model='sample_cov'):
+def run_min_variance(df_price, top_five, risk_model='sample_cov', min_weight_for_top_five=0.01):
+    """ Actually runs the optimization
+    
+    parameters:
+    -----------
+        df_price: dataframe of asset prices
+        top_five: dict of dict per portfolio with the preselected stocks that must be included in the optimizaed portfolio 
+                    (their weights must be at least X% of the portfolio)
+        risk_model: what kind of covariance matrix calculation to use - from pyportopt
+        min_weight_for_top_five: minimum weight that top five preselected stocks must have
+    returns:
+    --------
+        DTW matrix in a dataframe format
+    """
     mu = expected_returns.mean_historical_return(df_price)  # Expected returns
     print('calculating the covariance matrix')
     if risk_model == 'sample_cov':
@@ -218,7 +247,7 @@ def run_min_variance(df_price, top_five, risk_model='sample_cov'):
     results = dict()
     for index, port in top_five.items():
 
-        result = optimize_portfolio(mu, S, port)
+        result = optimize_portfolio(mu, S, port, min_weight_for_top_five)
         results[index] = result
     
     return results
@@ -231,49 +260,150 @@ def run_min_variance(df_price, top_five, risk_model='sample_cov'):
 #####################################################################
 
 
-def dtw_matrix_calc(df):
-    df_returns = df.pct_change().dropna()
+def cdist_soft_dtw(X, gamma=1.0):
+    """
+    Compute the cross-distance matrix using soft DTW
+    
+    Parameters:
+    -----------
+    X : array-like, shape=(n_ts, ts_length)
+        Time series dataset
+    gamma : float
+        Smoothing parameter for soft DTW
+        
+    Returns:
+    --------
+    distances : array, shape=(n_ts, n_ts)
+        Cross-similarity matrix
+    """
+    n_ts = X.shape[0]
+    distances = np.zeros((n_ts, n_ts))
+    
+    for i in range(n_ts):
+        for j in range(i, n_ts):
+            dist = soft_dtw(X[i], X[j], gamma=gamma)
+            distances[i, j] = dist
+            distances[j, i] = dist  # Symmetric matrix
+    
+    return distances
+
+
+
+
+
+
+
+def distance_matrix_calc(df, return_mode='arithmetic', soft_dtw=False, gamma=0.5):
+    """ calculates the DTW matrix for the 
+    
+    parameters:
+    -----------
+        df: dataframe with the stock prices
+    returns:
+    --------
+        DTW matrix in a dataframe format
+    """
+    if return_mode == 'arithmetic':
+        df_returns = df.pct_change().dropna()
+    elif return_mode == 'geometric':
+        df_returns = np.log(df / df.shift(1)).dropna()
+    
+    
     X = df_returns.T.values
 
+    
     scaler = TimeSeriesScalerMeanVariance()
     X_scaled = scaler.fit_transform(X)
     
-    distance_matrix = cdist_dtw(X_scaled)
+    if soft_dtw:
+        distance_matrix = cdist_soft_dtw(X_scaled, gamma=gamma)
+    else:
+        distance_matrix = cdist_dtw(X_scaled)
+
+
+    distance_matrix = np.fill_diagonal(distance_matrix, 0) #handle the non-zero diagonal occuring for soft_dtw
+    #np.maximum(distance_matrix, 0)
 
     tickers = df_returns.columns  # or wherever your tickers are stored
-    dtw_matrix_df = pd.DataFrame(distance_matrix, index=tickers, columns=tickers)
+    distance_matrix_df = pd.DataFrame(distance_matrix, index=tickers, columns=tickers)
 
-    return dtw_matrix_df
+    return distance_matrix_df#, distance_matrix
 
 
 
-def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single'):
-    df_returns = df.pct_change().dropna()
-    data_kmeans = df_returns.T.values
+def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', return_mode='arithmetic', soft_dtw=False, gamma=0.5): 
+    """ runs the clustering for one of the 3 possible models
+    
+    parameters:
+    -----------
+        df: dataframe with the stock prices 
+        n_clus: how many clusters to generate
+        model_name: kmeans, kshape or ahc (aggregated hierarchical clustering)
+        linkage: only for ahc, what kind of linkage to use
+        
+    returns:
+    --------
+        array of labels and dictionary mapping the cluster label to the ticker
+    """
+
+    if return_mode == 'arithmetic':
+        df_returns = df.pct_change().dropna()
+    elif return_mode == 'geometric':
+        df_returns = np.log(df / df.shift(1)).dropna()
+
+    data_clustering = df_returns.T.values
 
     tickers = list(df.columns)
     warnings.simplefilter(action='ignore', category=FutureWarning) #supress warnings for cleanliness
+    scaler = TimeSeriesScalerMeanVariance()
+    data_scaled = scaler.fit_transform(data_clustering)
 
-    data_scaled = TimeSeriesScalerMeanVariance().fit_transform(data_kmeans)
 
     if model_name == 'ahc':
-        dtw_matrix = dtw_matrix_calc(df)
+        dtw_matrix = distance_matrix_calc(df, return_mode=return_mode, soft_dtw=soft_dtw, gamma=gamma)
         model = AgglomerativeClustering(n_clusters=n_clus, metric='precomputed', linkage=linkage)
         labels = model.fit_predict(dtw_matrix)
+        inertia = None
     elif model_name == 'kmeans':
-        model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", random_state=0)
+        if soft_dtw:
+            model = TimeSeriesKMeans(n_clusters=n_clus, metric="softdtw", random_state=0, metric_params={"gamma": .5},)
+        else:
+            model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", random_state=0)
         labels = model.fit_predict(data_scaled)
+        inertia = model.inertia_
     elif model_name == 'kshape':
         model = KShape(n_clusters=n_clus, random_state=0)
         labels = model.fit_predict(data_scaled)
+        inertia = model.inertia_
 
     tickers_with_labels = {k: int(v) for k, v in zip(tickers, labels)}
 
-    return labels, tickers_with_labels
+    return labels, tickers_with_labels, inertia
 
 
-def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list=None):
-    dtw_matrix = dtw_matrix_calc(df)
+
+
+
+
+
+
+
+def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list=None, return_mode='arithmetic', soft_dtw=False, gamma=0.5):
+
+    """ runs the clustering for one of the 3 possible models and the Silhouette score calculation
+    parameters:
+    -----------
+        df: dataframe with the stock prices
+        n_clusters_list: list of number of clusters like [3,5,7] etc. that we want to find out the silhouette score for
+        model_name: kmeans, kshape or ahc (aggregated hierarchical clustering)
+        linkage_list: only for ahc, what kind of linkages to use
+    returns:
+    --------
+        DataFrame of the silhouette scores per N clusters and type of Linkage
+    """
+
+    distance_matrix_df = distance_matrix_calc(df, return_mode=return_mode, soft_dtw=soft_dtw, gamma=gamma)
+
     silhouettes = []
 
     if method == 'ahc':
@@ -282,8 +412,8 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
         
         for linkage in linkage_list:
             for n in n_clusters_list:
-                labels, t = run_clustering_model(df, n_clus=n, model_name=method, linkage=linkage)
-                score = silhouette_score(dtw_matrix, labels, metric='precomputed')
+                labels, _, _ = run_clustering_model(df, n_clus=n, model_name=method, linkage=linkage, return_mode=return_mode)
+                score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
                 silhouettes.append({
                     'clusters': n,
                     'silhouette_score': float(score),
@@ -291,13 +421,24 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
                     'linkage': linkage
                 })
     
-    else:
+    elif method == 'kmeans':
         for n in n_clusters_list:
-            labels, t = run_clustering_model(df, n_clus=n, model_name=method)
-            score = silhouette_score(dtw_matrix, labels, metric='precomputed')
+            labels, _, inertia = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode, soft_dtw=soft_dtw)
+            score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
             silhouettes.append({
                 'clusters': n,
                 'silhouette_score': float(score),
+                'inertia': inertia,
+                'method': method
+            })
+    
+    else: 
+        print('For now, we use inertia for KShape, as calculating SBD matrix is not feasible')
+        for n in n_clusters_list:
+            _, _, inertia = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
+            silhouettes.append({
+                'clusters': n,
+                'inertia_score': float(inertia),
                 'method': method
             })
 
