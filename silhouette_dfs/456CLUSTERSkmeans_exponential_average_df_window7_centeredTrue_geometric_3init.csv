@@ -1,0 +1,4 @@
+,clusters,silhouette_score,inertia,method,return_mode,n_init,smoothing,window_size/span
+0,4,0.0656094942481039,112.44335785790028,kmeans,geometric,3,exponential_average_df,7
+1,5,0.04189729711129853,111.02370274078635,kmeans,geometric,3,exponential_average_df,7
+2,6,0.05080245470660583,109.07421756061903,kmeans,geometric,3,exponential_average_df,7

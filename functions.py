@@ -21,7 +21,6 @@ from tslearn.preprocessing import TimeSeriesScalerMeanVariance
 from tslearn.clustering import TimeSeriesKMeans
 from tslearn.metrics import cdist_dtw
 from tslearn.clustering import KShape
-from tslearn.metrics import soft_dtw
 from sklearn.metrics.pairwise import pairwise_distances
 
 from sklearn.cluster import AgglomerativeClustering
@@ -260,32 +259,17 @@ def run_min_variance(df_price, top_five, risk_model='sample_cov', min_weight_for
 #####################################################################
 
 
-def cdist_soft_dtw(X, gamma=1.0):
-    """
-    Compute the cross-distance matrix using soft DTW
+# def cdist_soft_dtw(X, gamma=1.0):
+#     n_ts = X.shape[0]
+#     distances = np.zeros((n_ts, n_ts))
     
-    Parameters:
-    -----------
-    X : array-like, shape=(n_ts, ts_length)
-        Time series dataset
-    gamma : float
-        Smoothing parameter for soft DTW
-        
-    Returns:
-    --------
-    distances : array, shape=(n_ts, n_ts)
-        Cross-similarity matrix
-    """
-    n_ts = X.shape[0]
-    distances = np.zeros((n_ts, n_ts))
+#     for i in range(n_ts):
+#         for j in range(i, n_ts):
+#             #dist = soft_dtw(X[i], X[j], gamma=gamma)
+#             #distances[i, j] = dist
+#             #distances[j, i] = dist
     
-    for i in range(n_ts):
-        for j in range(i, n_ts):
-            dist = soft_dtw(X[i], X[j], gamma=gamma)
-            distances[i, j] = dist
-            distances[j, i] = dist  # Symmetric matrix
-    
-    return distances
+#     return distances
 
 
 
@@ -293,7 +277,7 @@ def cdist_soft_dtw(X, gamma=1.0):
 
 
 
-def distance_matrix_calc(df, return_mode='arithmetic', soft_dtw=False, gamma=0.5):
+def distance_matrix_calc(df, return_mode='arithmetic'):
     """ calculates the DTW matrix for the 
     
     parameters:
@@ -315,13 +299,11 @@ def distance_matrix_calc(df, return_mode='arithmetic', soft_dtw=False, gamma=0.5
     scaler = TimeSeriesScalerMeanVariance()
     X_scaled = scaler.fit_transform(X)
     
-    if soft_dtw:
-        distance_matrix = cdist_soft_dtw(X_scaled, gamma=gamma)
-    else:
-        distance_matrix = cdist_dtw(X_scaled)
+    
+    distance_matrix = cdist_dtw(X_scaled)
 
 
-    distance_matrix = np.fill_diagonal(distance_matrix, 0) #handle the non-zero diagonal occuring for soft_dtw
+    #distance_matrix = np.fill_diagonal(distance_matrix, 0) #handle the non-zero diagonal occuring for soft_dtw
     #np.maximum(distance_matrix, 0)
 
     tickers = df_returns.columns  # or wherever your tickers are stored
@@ -331,7 +313,7 @@ def distance_matrix_calc(df, return_mode='arithmetic', soft_dtw=False, gamma=0.5
 
 
 
-def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', return_mode='arithmetic', soft_dtw=False, gamma=0.5): 
+def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', return_mode='arithmetic', n_init=1): 
     """ runs the clustering for one of the 3 possible models
     
     parameters:
@@ -360,25 +342,22 @@ def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', re
 
 
     if model_name == 'ahc':
-        dtw_matrix = distance_matrix_calc(df, return_mode=return_mode, soft_dtw=soft_dtw, gamma=gamma)
+        dtw_matrix = distance_matrix_calc(df, return_mode=return_mode)
         model = AgglomerativeClustering(n_clusters=n_clus, metric='precomputed', linkage=linkage)
         labels = model.fit_predict(dtw_matrix)
         inertia = None
     elif model_name == 'kmeans':
-        if soft_dtw:
-            model = TimeSeriesKMeans(n_clusters=n_clus, metric="softdtw", random_state=0, metric_params={"gamma": .5},)
-        else:
-            model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", random_state=0)
+        model = TimeSeriesKMeans(n_clusters=n_clus, metric="dtw", n_init=n_init, init='random')
         labels = model.fit_predict(data_scaled)
         inertia = model.inertia_
     elif model_name == 'kshape':
-        model = KShape(n_clusters=n_clus, random_state=0)
+        model = KShape(n_clusters=n_clus, n_init=n_init)
         labels = model.fit_predict(data_scaled)
         inertia = model.inertia_
 
     tickers_with_labels = {k: int(v) for k, v in zip(tickers, labels)}
 
-    return labels, tickers_with_labels, inertia
+    return labels, tickers_with_labels, inertia, model.cluster_centers_
 
 
 
@@ -388,7 +367,7 @@ def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', re
 
 
 
-def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list=None, return_mode='arithmetic', soft_dtw=False, gamma=0.5):
+def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list=None, return_mode='arithmetic', n_init=1):
 
     """ runs the clustering for one of the 3 possible models and the Silhouette score calculation
     parameters:
@@ -402,7 +381,7 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
         DataFrame of the silhouette scores per N clusters and type of Linkage
     """
 
-    distance_matrix_df = distance_matrix_calc(df, return_mode=return_mode, soft_dtw=soft_dtw, gamma=gamma)
+    distance_matrix_df = distance_matrix_calc(df, return_mode=return_mode)
 
     silhouettes = []
 
@@ -412,7 +391,7 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
         
         for linkage in linkage_list:
             for n in n_clusters_list:
-                labels, _, _ = run_clustering_model(df, n_clus=n, model_name=method, linkage=linkage, return_mode=return_mode)
+                labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, linkage=linkage, return_mode=return_mode)
                 score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
                 silhouettes.append({
                     'clusters': n,
@@ -423,7 +402,7 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
     
     elif method == 'kmeans':
         for n in n_clusters_list:
-            labels, _, inertia = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode, soft_dtw=soft_dtw)
+            labels, _, inertia, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode, n_init=n_init)
             score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
             silhouettes.append({
                 'clusters': n,
@@ -435,7 +414,7 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
     else: 
         print('For now, we use inertia for KShape, as calculating SBD matrix is not feasible')
         for n in n_clusters_list:
-            _, _, inertia = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
+            _, _, inertia, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
             silhouettes.append({
                 'clusters': n,
                 'inertia_score': float(inertia),
