@@ -1,0 +1,4 @@
+,clusters,silhouette_score,inertia,method,return_mode,n_init,smoothing,window_size/span
+0,4,0.030973453501151223,129.01343296775875,kmeans,geometric,3,moving_average_df,3
+1,5,0.021024137335925973,127.26975758563437,kmeans,geometric,3,moving_average_df,3
+2,6,0.03287328714230356,125.41945235523993,kmeans,geometric,3,moving_average_df,3

@@ -1,0 +1,4 @@
+,clusters,inertia_score,method,return_mode,n_init,smoothing,window_size/span
+0,4,0.21091473551099846,kshape,arithmetic,3,moving_average,7
+1,5,0.2003201655233333,kshape,arithmetic,3,moving_average,7
+2,6,0.16741169925553137,kshape,arithmetic,3,moving_average,7

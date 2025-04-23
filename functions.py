@@ -159,10 +159,10 @@ def generate_rand_portfolios(n_reps:int, n_stocks:int, tickers:list):
 
 
 
-def select_top_five(portfolios: List[Dict], metric: pd.Series) -> List[Dict]: #gets the top 5 stocks with the highest sharpe ratio
+def select_top_five(portfolios, metric: pd.Series) -> List[Dict]: #gets the top 5 stocks with the highest sharpe ratio
     top_five_dict = {}
     for name, port in portfolios.items():
-        portfolio = port
+        portfolio = list(port.keys())
         
         metric = metric.apply(lambda x: float(x))
 
@@ -373,8 +373,11 @@ def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', re
         inertia = model.inertia_
 
     tickers_with_labels = {k: int(v) for k, v in zip(tickers, labels)}
-
-    return labels, tickers_with_labels, inertia, model.cluster_centers_
+    try:
+        cluster_centers = model.cluster_centers_
+    except:
+        cluster_centers = None
+    return labels, tickers_with_labels, inertia, cluster_centers
 
 
 
@@ -429,7 +432,7 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
             })
     
     else: 
-        print('For now, we use inertia for KShape, as calculating SBD matrix is not feasible')
+        print('For now, we use inertia for KShape, as calculating SBD matrix is not feasible (maybe use R for that?)')
         for n in n_clusters_list:
             _, _, inertia, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
             silhouettes.append({
