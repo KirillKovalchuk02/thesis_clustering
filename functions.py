@@ -26,7 +26,7 @@ from sklearn.metrics.pairwise import pairwise_distances
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import silhouette_score
 
-
+import subprocess
 import warnings
 
 
@@ -276,25 +276,7 @@ def run_min_variance(df_price, top_five, risk_model='sample_cov', min_weight_for
 #####################################################################
 
 
-# def cdist_soft_dtw(X, gamma=1.0):
-#     n_ts = X.shape[0]
-#     distances = np.zeros((n_ts, n_ts))
-    
-#     for i in range(n_ts):
-#         for j in range(i, n_ts):
-#             #dist = soft_dtw(X[i], X[j], gamma=gamma)
-#             #distances[i, j] = dist
-#             #distances[j, i] = dist
-    
-#     return distances
-
-
-
-
-
-
-
-def distance_matrix_calc(df, return_mode='arithmetic'):
+def distance_matrix_calc(df, return_mode='arithmetic', method='kmeans'):
     """ calculates the DTW matrix for the 
     
     parameters:
@@ -304,28 +286,37 @@ def distance_matrix_calc(df, return_mode='arithmetic'):
     --------
         DTW matrix in a dataframe format
     """
+    tickers = df.columns
+
+
     if return_mode == 'arithmetic':
         df_returns = df.pct_change().dropna()
     elif return_mode == 'geometric':
         df_returns = np.log(df / df.shift(1)).dropna()
     
+    if method == 'kmeans' or method == 'ahc':
+        X = df_returns.T.values
+
+        scaler = TimeSeriesScalerMeanVariance()
+        X_scaled = scaler.fit_transform(X)
     
-    X = df_returns.T.values
+        distance_matrix = cdist_dtw(X_scaled)
+
+        distance_matrix_df = pd.DataFrame(distance_matrix, index=tickers, columns=tickers)
+        
+    elif method == 'kshape':
+        df_returns.to_csv('data_for_R/dataframe_returns.csv') #the first row with NAs is already dropped
+        retcode = subprocess.call(['C:/Program Files/R/R-4.5.0/bin/Rscript', '--vanilla', 'sbd.r'], shell=True) #EXECUTING R script, which saves the SBD matrix to the data_for_R folder
+        if retcode == 0:
+            pass
+        else:
+            raise RuntimeError("Something went wrong with the R file")
+        
+        distance_matrix_df = pd.read_csv('data_for_R/sbd_matrix.csv')
+        distance_matrix_df.columns = tickers
+        distance_matrix_df.index = tickers
 
     
-    scaler = TimeSeriesScalerMeanVariance()
-    X_scaled = scaler.fit_transform(X)
-    
-    
-    distance_matrix = cdist_dtw(X_scaled)
-
-
-    #distance_matrix = np.fill_diagonal(distance_matrix, 0) #handle the non-zero diagonal occuring for soft_dtw
-    #np.maximum(distance_matrix, 0)
-
-    tickers = df_returns.columns  # or wherever your tickers are stored
-    distance_matrix_df = pd.DataFrame(distance_matrix, index=tickers, columns=tickers)
-
     return distance_matrix_df#, distance_matrix
 
 
@@ -354,12 +345,13 @@ def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', re
 
     tickers = list(df.columns)
     warnings.simplefilter(action='ignore', category=FutureWarning) #supress warnings for cleanliness
+
     scaler = TimeSeriesScalerMeanVariance()
     data_scaled = scaler.fit_transform(data_clustering)
 
 
     if model_name == 'ahc':
-        dtw_matrix = distance_matrix_calc(df, return_mode=return_mode)
+        dtw_matrix = distance_matrix_calc(df, return_mode=return_mode, method=model_name)
         model = AgglomerativeClustering(n_clusters=n_clus, metric='precomputed', linkage=linkage)
         labels = model.fit_predict(dtw_matrix)
         inertia = None
@@ -401,7 +393,7 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
         DataFrame of the silhouette scores per N clusters and type of Linkage
     """
 
-    distance_matrix_df = distance_matrix_calc(df, return_mode=return_mode)
+    distance_matrix_df = distance_matrix_calc(df, return_mode=return_mode, method=method)
 
     silhouettes = []
 
@@ -427,17 +419,21 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
             silhouettes.append({
                 'clusters': n,
                 'silhouette_score': float(score),
-                'inertia': inertia,
+                'inertia': float(inertia),
                 'method': method
             })
     
     else: 
-        print('For now, we use inertia for KShape, as calculating SBD matrix is not feasible (maybe use R for that?)')
+        #print('For now, we use inertia for KShape, as calculating SBD matrix is not feasible (maybe use R for that?)')
         for n in n_clusters_list:
-            _, _, inertia, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
+            labels, _, inertia, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
+
+            score = silhouette_score(distance_matrix_df, labels, metric='precomputed') #TESTTTTT
+
             silhouettes.append({
                 'clusters': n,
-                'inertia_score': float(inertia),
+                'silhouette_score': float(score),
+                'inertia': float(inertia),
                 'method': method
             })
 
