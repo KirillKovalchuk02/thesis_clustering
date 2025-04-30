@@ -56,7 +56,7 @@ def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_si
 
 #Simulations for the whole subset
 
-def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims=100, t=100, distribution_model='multivar_norm'):
+def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims=100, t=100, distribution_model='multivar_norm', rf_annual=0.04):
     simulations_results_dict = dict()
     subset_statistics_df = pd.DataFrame()
 
@@ -77,13 +77,22 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
         std_cumulative_return = np.std(cumulative_returns_per_simulation) # path uncertainty
         std_daily_return = np.std(daily_returns) #return variability per day
         #sharpe ratio
-        rf_annual = 0.05
         rf_daily = rf_annual / 252
         rf_cumulative = (1 + rf_annual) ** (daily_returns.shape[0] / 252) - 1
         sharpe_daily = (mean_daily_return_for_portfolio - rf_daily) / std_daily_return
         sharpe_cumulative = (mean_cumulative_return_for_portfolio - rf_cumulative)  / std_cumulative_return
         sharpe_annual = sharpe_daily * np.sqrt(252)
         sharpe_cumulative_annual = sharpe_cumulative * np.sqrt(252)
+
+        #Sortino ratio
+        downside_returns = np.minimum(0, daily_returns - rf_daily)
+        downside_std = np.sqrt(np.mean(downside_returns ** 2))
+        if downside_std == 0:
+            sortino_ratio = np.nan
+        else:
+            sortino_ratio = (mean_daily_return_for_portfolio - rf_daily) / downside_std
+        
+        sortino_annual = sortino_ratio * np.sqrt(252)
 
         #VaR:
         last_period_returns = portfolio_sims[-1:]
@@ -105,7 +114,9 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
                                      'sharpe_annual': [sharpe_annual],
                                      'sharpe_cumulative_annual': [sharpe_cumulative_annual], 
                                      'VaR': [VaR_final],
-                                     'CVaR': [CVaR_final]})
+                                     'CVaR': [CVaR_final],
+                                     'sortino': [sortino_ratio],
+                                     'sortino_annual': [sortino_annual]})
 
         subset_statistics_df = pd.concat([subset_statistics_df, stat_results])
 
