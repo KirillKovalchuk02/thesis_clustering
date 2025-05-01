@@ -111,9 +111,6 @@ def double_listed_stocks(full_stocks_dict): #finds the doubly listed tickers in 
 
 
 
-
-#Sharpe Ratio calculation
-
 def sharpe_ratio_calculation(df, rf_rate_annual = 0.02, ):
     df_pct_change = df.pct_change()
 
@@ -128,18 +125,6 @@ def sharpe_ratio_calculation(df, rf_rate_annual = 0.02, ):
     return sharpe_ratio
 
 
-
-#OLD:
-# def generate_rand_portfolios(n_reps:int, n_stocks:int, tickers:list):
-#     random_portfolios = {}
-#     for i in range(0, n_reps):
-#         stocks_indices = dict()
-#         stocks_indices = random.sample(tickers, n_stocks)
-#         random_portfolios[f'portfolio_{i}'] = stocks_indices
-        
-#     return random_portfolios 
-
-#NEW:
 def generate_rand_portfolios(n_reps:int, n_stocks:int, tickers:list):
     random_portfolios = {}
     for i in range(0, n_reps):
@@ -157,8 +142,6 @@ def generate_rand_portfolios(n_reps:int, n_stocks:int, tickers:list):
     return random_portfolios
 
 
-
-
 def select_top_five(portfolios, metric: pd.Series) -> List[Dict]: #gets the top 5 stocks with the highest sharpe ratio
     top_five_dict = {}
     for name, port in portfolios.items():
@@ -172,9 +155,6 @@ def select_top_five(portfolios, metric: pd.Series) -> List[Dict]: #gets the top 
         top_five = dict(list(sorted_dict.items())[:5])
         top_five_dict[name] = top_five
     return top_five_dict
-
-
-
 
 
 
@@ -201,41 +181,117 @@ def log(msg):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
 
 
-def optimize_portfolio(mu, S, top_five:dict, min_weight_for_top_five=0.01):
-    """ runs the portfolio optimization with the min variance as an objective 
+# def optimize_portfolio(mu, S, top_five:dict, min_weight_for_top_five=0.01):
+#     """ runs the portfolio optimization with the min variance as an objective 
     
-    parameters:
-    -----------
-        mu: Expected returns
-        S: Covariance Matrix
-        top_five: dict with the preselected stocks that must be included in the optimizaed portfolio 
-                    (their weights must be at least X% of the portfolio)
-        min_weight_for_top_five: minimum weight that top five preselected stocks must have
-    returns:
-    --------
-        DTW matrix in a dataframe format
+#     parameters:
+#     -----------
+#         mu: Expected returns
+#         S: Covariance Matrix
+#         top_five: dict with the preselected stocks that must be included in the optimizaed portfolio 
+#                     (their weights must be at least X% of the portfolio)
+#         min_weight_for_top_five: minimum weight that top five preselected stocks must have
+#     returns:
+#     --------
+#        dictionary of tickers for keys and weights for values
+#     """
+
+#     #log('calculating frontier')
+#     ef = EfficientFrontier(mu, S, solver=cp.CPLEX, weight_bounds=(0,1))
+
+#     for ticker in top_five.keys():
+#         ef.add_constraint(lambda w: w[ef.tickers.index(ticker)] >= min_weight_for_top_five)
+
+#     booleans = cp.Variable(len(ef.tickers), boolean=True)
+#     ef.add_constraint(lambda x: x <= booleans)
+#     ef.add_constraint(lambda x: cp.sum(booleans) == 15)
+
+#     #log('finding min_volatility')
+#     weights = ef.min_volatility()
+    
+#     selected = {ticker: weights[ticker] for ticker in ef.tickers if weights[ticker] >= 0.01}
+
+#     return selected
+
+
+################NEW VERSION WITH CLUSTERS: ######################
+def optimize_portfolio(mu, S, top_five:dict, clusters:dict=None, min_weight_for_top_five=0.01, verbose=False, min_stocks_per_cluster=2):
     """
-
-    log('calculating frontier')
+    Optimizes a portfolio with the following constraints:
+    - Minimum weights for top five stocks
+    - Exactly 15 stocks in total
+    - At least 2 stocks from each cluster
+    
+    Parameters:
+    -----------
+    mu : pd.Series
+        Expected returns for each ticker
+    S : pd.DataFrame
+        Covariance matrix of returns
+    top_five : dict
+        Dictionary of top five tickers and their scores
+    clusters : dict
+        Dictionary mapping tickers to their cluster labels
+    min_weight_for_top_five : float, optional
+        Minimum weight for each of the top five stocks
+        
+    Returns:
+    --------
+    dict
+        Selected tickers and their optimized weights
+    """
     ef = EfficientFrontier(mu, S, solver=cp.CPLEX, weight_bounds=(0,1))
-
+    
     for ticker in top_five.keys():
-        ef.add_constraint(lambda w: w[ef.tickers.index(ticker)] >= min_weight_for_top_five)
-
+        ef.add_constraint(lambda w, t=ticker: w[ef.tickers.index(t)] >= min_weight_for_top_five)
+    
     booleans = cp.Variable(len(ef.tickers), boolean=True)
+
     ef.add_constraint(lambda x: x <= booleans)
     ef.add_constraint(lambda x: cp.sum(booleans) == 15)
+    
 
-    log('finding min_volatility')
+
+
+    if clusters:
+        unique_clusters = set(clusters.values())
+        #print(f"Found {len(unique_clusters)} unique clusters: {unique_clusters}")
+    
+        # Add cluster constraints - at least 2 stocks from each cluster
+        for cluster_label in unique_clusters:
+            # Get indices of tickers in this cluster that are in ef.tickers
+            cluster_tickers = [ticker for ticker in ef.tickers if ticker in clusters and clusters[ticker] == cluster_label]
+            cluster_indices = [ef.tickers.index(ticker) for ticker in cluster_tickers]
+
+            if verbose:
+                print(f"Cluster {cluster_label}: found {len(cluster_indices)} stocks")
+
+            # Add constraint to select at least 2 stocks from this cluster
+            if cluster_indices:  # Only add constraint if there are stocks in this cluster
+                cluster_sum = cp.sum([booleans[i] for i in cluster_indices])
+                ef.add_constraint(lambda w, cs=cluster_sum: cs >= min_stocks_per_cluster)
+    
+    # Find the minimum volatility portfolio
     weights = ef.min_volatility()
     
-    selected = {ticker: weights[ticker] for ticker in ef.tickers if weights[ticker] >= 0.01}
+    if verbose and clusters:
+        # Check which stocks were selected and their weights
+        selected_stocks = [ticker for ticker in ef.tickers if weights[ticker] > 1e-5]
+        print(f"Selected {len(selected_stocks)} stocks in total")
 
+        # Print cluster representation
+        for cluster_label in unique_clusters:
+            cluster_stocks = [t for t in selected_stocks if t in clusters and clusters[t] == cluster_label]
+            print(f"Cluster {cluster_label}: {len(cluster_stocks)} stocks selected - {cluster_stocks}")
+    
+    # Don't filter by minimum weight here to ensure we get all 15 stocks
+    selected = {ticker: weights[ticker] for ticker in ef.tickers if weights[ticker] > 1e-5}
+    
     return selected
 
 
 
-def run_min_variance(df_price, top_five, risk_model='sample_cov', min_weight_for_top_five=0.01):
+def run_min_variance(df_price, top_five:dict, risk_model='sample_cov', min_weight_for_top_five=0.01, clusters=None, min_stocks_per_cluster=2):
     """ Actually runs the optimization
     
     parameters:
@@ -263,7 +319,7 @@ def run_min_variance(df_price, top_five, risk_model='sample_cov', min_weight_for
     results = dict()
     for index, port in top_five.items():
 
-        result = optimize_portfolio(mu, S, port, min_weight_for_top_five)
+        result = optimize_portfolio(mu, S, port, min_weight_for_top_five, clusters=clusters, min_stocks_per_cluster=min_stocks_per_cluster)
         results[index] = result
     
     return results
