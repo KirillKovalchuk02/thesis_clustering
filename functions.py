@@ -111,7 +111,7 @@ def double_listed_stocks(full_stocks_dict): #finds the doubly listed tickers in 
 
 
 
-def sharpe_ratio_calculation(df, rf_rate_annual = 0.02, ):
+def sharpe_ratio_calculation(df, rf_rate_annual = 0.02):
     df_pct_change = df.pct_change()
 
     avg_return = df_pct_change.mean()
@@ -255,7 +255,6 @@ def optimize_portfolio(mu, S, top_five:dict, clusters:dict=None, min_weight_for_
 
     if clusters:
         unique_clusters = set(clusters.values())
-        #print(f"Found {len(unique_clusters)} unique clusters: {unique_clusters}")
     
         # Add cluster constraints - at least 2 stocks from each cluster
         for cluster_label in unique_clusters:
@@ -275,6 +274,7 @@ def optimize_portfolio(mu, S, top_five:dict, clusters:dict=None, min_weight_for_
     weights = ef.min_volatility()
     
     if verbose and clusters:
+        print(f"Found {len(unique_clusters)} unique clusters: {unique_clusters}")
         # Check which stocks were selected and their weights
         selected_stocks = [ticker for ticker in ef.tickers if weights[ticker] > 1e-5]
         print(f"Selected {len(selected_stocks)} stocks in total")
