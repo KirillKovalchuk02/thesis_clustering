@@ -494,3 +494,50 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
             })
 
     return pd.DataFrame(silhouettes)
+
+
+
+
+
+def label_balance(df_dict:dict, window, method, return_mode, n_clus, linkage):
+
+    # Suppress all warnings
+    warnings.filterwarnings('ignore')
+
+
+    df_name = list(df_dict.keys())[0]
+
+    df_smooth = df_dict[df_name].rolling(window=window, center=True).mean()
+    _, tickers_with_labels, _, _ = run_clustering_model(df_smooth, n_clus=n_clus, model_name=method, linkage=linkage, return_mode=return_mode, n_init=3)
+
+    res = pd.DataFrame(list(tickers_with_labels.items()), columns=['ticker', 'label'])
+    out = res.groupby('label').count()
+
+    #if not ((out['ticker'] / len(joined_df.columns)) >= 0.6).any():
+    max_percentage_per_cluster = (out['ticker'] / len(joined_df.columns)).max()
+    min_percentage_per_cluster = (out['ticker'] / len(joined_df.columns)).min()
+    min_max_delta = round(max_percentage_per_cluster - min_percentage_per_cluster, 4)
+        #print(f'Window - {window},method - {method},return mode - {return_mode} \nMax {round(max_percentage_per_cluster * 100, 2)} % of observations per cluster  \nMin {round(min_percentage_per_cluster*100, 2)} % of observations per cluster')
+
+    # out['return_mode'] = return_mode
+    # out['window_size'] = window
+    # out['method'] = method
+    # out['clusters'] = n_clus
+    # out['linkage'] = linkage
+    # out['df_mode'] = df_name
+    if method != 'ahc':
+        linkage = 'not_applicable'
+
+    output = {'return_mode': [return_mode], 
+              'window_size': [window], 
+              'method': [method],
+              'linkage': [linkage], 
+              'df_mode': [df_name], 
+               'min_per_cluster': [round(min_percentage_per_cluster, 4)],
+              'max_per_cluster': [round(max_percentage_per_cluster, 4)],
+              'min_max_delta': [min_max_delta]}
+    
+    output_df_one_row = pd.DataFrame(output)
+    
+
+    return output_df_one_row #out, max_percentage_per_cluster, min_percentage_per_cluster
