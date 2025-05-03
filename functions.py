@@ -514,8 +514,8 @@ def label_balance(df_dict:dict, window, method, return_mode, n_clus, linkage):
     out = res.groupby('label').count()
 
     #if not ((out['ticker'] / len(joined_df.columns)) >= 0.6).any():
-    max_percentage_per_cluster = (out['ticker'] / len(joined_df.columns)).max()
-    min_percentage_per_cluster = (out['ticker'] / len(joined_df.columns)).min()
+    max_percentage_per_cluster = (out['ticker'] / len(df_smooth.columns)).max()
+    min_percentage_per_cluster = (out['ticker'] / len(df_smooth.columns)).min()
     min_max_delta = round(max_percentage_per_cluster - min_percentage_per_cluster, 4)
         #print(f'Window - {window},method - {method},return mode - {return_mode} \nMax {round(max_percentage_per_cluster * 100, 2)} % of observations per cluster  \nMin {round(min_percentage_per_cluster*100, 2)} % of observations per cluster')
 
@@ -529,6 +529,7 @@ def label_balance(df_dict:dict, window, method, return_mode, n_clus, linkage):
         linkage = 'not_applicable'
 
     output = {'return_mode': [return_mode], 
+              'clusters': [n_clus],
               'window_size': [window], 
               'method': [method],
               'linkage': [linkage], 

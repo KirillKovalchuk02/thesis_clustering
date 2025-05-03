@@ -3,7 +3,43 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import normaltest
 
+from pypfopt import EfficientFrontier
+from pypfopt import risk_models
+from pypfopt import expected_returns
 
+
+
+
+
+
+
+
+def reoptimize_weights(df_prices, portfolio_set, how='max_sharpe', min_weight=0.01):
+    new_set = dict()
+    for key, portfolio in portfolio_set.items():
+        if isinstance(portfolio, dict):
+            tickers = list(portfolio.keys())
+        elif isinstance(portfolio, list):
+            tickers = portfolio
+
+        if how == 'equal_weights':
+            weight = 1/len(tickers)
+            new_portfolio = {ticker: weight for ticker in tickers}
+        
+        elif how == 'max_sharpe':
+            prices_df = df_prices[tickers]
+        
+            mu = expected_returns.mean_historical_return(prices_df)  # Expected returns
+            S = risk_models.sample_cov(prices_df)  # Covariance matrix
+
+            ef = EfficientFrontier(mu, S, weight_bounds=(min_weight, 1))
+            weights = ef.max_sharpe()
+            new_portfolio = ef.clean_weights()
+
+        new_set[key] = new_portfolio
+        
+    return new_set
+    
 
 def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_sims=100, t=100, distribution_model='multivar_norm', plot=False, initialPortfolio=100):
     mean_returns = returns_for_portfolio.mean()
