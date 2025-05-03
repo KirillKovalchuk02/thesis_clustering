@@ -1,12 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-from scipy.stats import normaltest
+
 
 from pypfopt import EfficientFrontier
 from pypfopt import risk_models
 from pypfopt import expected_returns
 
+from scipy.stats import f_oneway
+from scipy.stats import kruskal
+from scipy.stats import normaltest
+
+import scikit_posthocs as sp
 
 
 
@@ -171,3 +176,58 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
     print(normality_results_df)
 
     return simulations_results_dict, subset_statistics_df, normality_results_df
+
+
+
+
+
+
+
+def kruskal_anova_test(subset_stats_dfs:dict, metrics='all', test='anova'):
+    if metrics == 'all':
+        subset_stats_dfs_list = [x for x in subset_stats_dfs.values()]
+        metrics = list(subset_stats_dfs_list[0].columns)
+
+    tests_results = dict()
+    for metric in metrics:
+        groups = [subset_df[metric] for k, subset_df in subset_stats_dfs.items()]
+    
+        if test == 'anova':
+            test_stat, test_p = f_oneway(*groups)
+        elif test == 'kruskal':
+            test_stat, test_p = kruskal(*groups)
+
+        tests_results[metric] = {'test_stat': round(float(test_stat), 4), 'test_p': round(float(test_p), 4)}
+    
+    return pd.DataFrame(tests_results).T
+
+
+
+
+def dunn_bonferroni(subset_stats_dfs:dict, metrics='all'):
+    if metrics == 'all':
+        subset_stats_dfs_list = [x for x in subset_stats_dfs.values()]
+        metrics = list(subset_stats_dfs_list[0].columns)
+
+    dunn_tables_results = dict()
+    for metric in metrics:
+
+        group_list = list()
+        group_labels = list()
+        for i, subset_dict_name in enumerate(subset_stats_dfs):
+            group = subset_stats_dfs[subset_dict_name][metric]
+            group_list.append(group)
+            group_labels.extend([subset_dict_name.replace(' Stats', '')] * len(group))
+        
+
+        data = pd.concat(group_list, ignore_index=True)
+
+
+        df = pd.DataFrame({'value': data, 'group': group_labels})
+        result = sp.posthoc_dunn(df, val_col='value', group_col='group', p_adjust='bonferroni')    
+        result = result.astype(float).round(4)
+
+        dunn_tables_results[metric] = result
+
+    
+    return dunn_tables_results
