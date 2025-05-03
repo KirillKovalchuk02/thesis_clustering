@@ -470,26 +470,23 @@ def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list
     
     elif method == 'kmeans':
         for n in n_clusters_list:
-            labels, _, inertia, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode, n_init=n_init)
+            labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode, n_init=n_init)
             score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
             silhouettes.append({
                 'clusters': n,
                 'silhouette_score': float(score),
-                'inertia': float(inertia),
                 'method': method
             })
     
     else: 
-        #print('For now, we use inertia for KShape, as calculating SBD matrix is not feasible (maybe use R for that?)')
         for n in n_clusters_list:
-            labels, _, inertia, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
+            labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
 
-            score = silhouette_score(distance_matrix_df, labels, metric='precomputed') #TESTTTTT
+            score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
 
             silhouettes.append({
                 'clusters': n,
                 'silhouette_score': float(score),
-                'inertia': float(inertia),
                 'method': method
             })
 
@@ -542,3 +539,100 @@ def label_balance(df_dict:dict, window, method, return_mode, n_clus, linkage):
     
 
     return output_df_one_row #out, max_percentage_per_cluster, min_percentage_per_cluster
+
+
+
+
+
+
+
+
+
+
+
+#TEST THE COMBINED FUNCTION -  delete the separate ones
+
+def test_clustering_metrics(df_dict, n_clusters_list, method='kmeans', linkage_list=None, 
+                           return_mode='arithmetic', window=1, n_init=1):
+    """
+    Calculates both silhouette scores and label balance metrics for clustering models.
+    
+    Parameters:
+    -----------
+        df_dict: dict with dataframe name as key and stock prices dataframe as value
+        n_clusters_list: list of number of clusters like [3,5,7] etc. that we want to find out the scores for
+        method: 'kmeans', 'kshape' or 'ahc' (aggregated hierarchical clustering)
+        linkage_list: only for ahc, what kind of linkages to use
+        return_mode: usually 'arithmetic' 
+        window: rolling window size for smoothing the data
+        n_init: number of k-means initializations
+        
+    Returns:
+    --------
+        Combined DataFrame with silhouette scores and balance metrics
+    """
+    import warnings
+    warnings.filterwarnings('ignore')
+    
+    # Get the dataframe from dict
+    df_name = list(df_dict.keys())[0]
+    df = df_dict[df_name]
+    
+    # Apply rolling window smoothing
+    df_smooth = df.rolling(window=window, center=True).mean()
+    
+    # Calculate distance matrix
+    distance_matrix_df = distance_matrix_calc(df_smooth, return_mode=return_mode, method=method)
+    
+    # Store results
+    results = []
+    
+
+    if linkage_list is None:
+        linkage_list = ['not_applicable']
+    
+    for linkage in linkage_list:
+        for n in n_clusters_list:
+            # Get clustering results
+            labels, tickers_with_labels, _, _ = run_clustering_model(
+                df_smooth, n_clus=n, model_name=method, linkage=linkage, 
+                return_mode=return_mode, n_init=n_init
+            )
+            
+            # Calculate metrics
+            sil_score, balance_metrics = _calculate_metrics(df_smooth, labels, tickers_with_labels, distance_matrix_df)
+            
+            results.append({
+                'clusters': n,
+                'silhouette_score': float(sil_score),
+                'method': method,
+                'linkage': linkage,
+                'return_mode': return_mode,
+                'window_size': window,
+                'df_mode': df_name,
+                **balance_metrics
+            })
+    
+    return pd.DataFrame(results)
+
+
+def _calculate_metrics(df_smooth, labels, tickers_with_labels, distance_matrix_df):
+    """Helper function to calculate both metrics for a given clustering result"""
+    # Calculate silhouette score
+    sil_score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
+    
+    # Calculate balance metrics
+    balance_df = pd.DataFrame(list(tickers_with_labels.items()), columns=['ticker', 'label'])
+    cluster_counts = balance_df.groupby('label').count()
+    
+    max_percentage_per_cluster = (cluster_counts['ticker'] / len(df_smooth.columns)).max()
+    min_percentage_per_cluster = (cluster_counts['ticker'] / len(df_smooth.columns)).min()
+    min_max_delta = round(max_percentage_per_cluster - min_percentage_per_cluster, 4)
+    
+    balance_metrics = {
+        'min_per_cluster': round(min_percentage_per_cluster, 4),
+        'max_per_cluster': round(max_percentage_per_cluster, 4),
+        'min_max_delta': min_max_delta
+    }
+    
+    return sil_score, balance_metrics
