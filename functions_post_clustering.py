@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+import random
 
 
 from pypfopt import EfficientFrontier
@@ -13,6 +14,128 @@ from scipy.stats import normaltest
 
 import scikit_posthocs as sp
 
+from functions import sharpe_ratio_calculation
+
+
+
+#CLAUDE's algorithm for selecting complementing cryptos:
+#After this we want to reoptimize the whole portfolio for max sharpe or min var
+
+def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_assignments, df_prices, n_cryptos=3, verbose=False):
+    """
+    Select cryptocurrencies to complement an existing stock portfolio based on
+    cluster diversification, with a special case for when all cryptos are in the same cluster.
+    
+    Parameters:
+    - existing_stocks: List of stock tickers in the current portfolio
+    - crypto_candidates: List of potential crypto assets to choose from
+    - cluster_assignments: Dictionary mapping each asset to its cluster ID
+    - returns_data: Dictionary mapping each asset to its return metric
+    - n_cryptos: Number of cryptocurrencies to select (default: 3)
+    
+    Returns:
+    - List of selected crypto assets
+    """
+    if verbose:
+        clusters_dict = {i: cluster_assignments[i] for i in existing_stocks}
+        print('Cluster Distribution in the original portfolio: \n')
+        print(pd.DataFrame(columns = ['ticker', 'cluster'], data=clusters_dict.items()).groupby('cluster').count())
+
+    returns_data = dict(sharpe_ratio_calculation(df_prices, rf_rate_annual = 0.02))
+    # Step 1: Identify clusters already represented in the portfolio
+    stock_clusters = set(cluster_assignments[stock] for stock in existing_stocks)
+    
+    # Step 2: Check crypto cluster diversity
+    crypto_clusters = set(cluster_assignments[crypto] for crypto in crypto_candidates)
+    
+    # Special case: All cryptos are in the same cluster
+    if len(crypto_clusters) == 1:
+        sorted_by_return = sorted(
+            crypto_candidates,
+            key=lambda crypto: returns_data[crypto],
+            reverse=True
+        )
+        return sorted_by_return[:n_cryptos]
+    
+    # Step 3: Group crypto candidates by their cluster
+    crypto_by_cluster = {}
+    for crypto in crypto_candidates:
+        cluster = cluster_assignments[crypto]
+        if cluster not in crypto_by_cluster:
+            crypto_by_cluster[cluster] = []
+        crypto_by_cluster[cluster].append(crypto)
+    
+    # Step 4: Select cryptos from unrepresented clusters first
+    selected_cryptos = []
+    unrepresented_clusters = set(crypto_by_cluster.keys()) - stock_clusters
+    
+    # Sort unrepresented clusters by the best return in each cluster
+    cluster_best_returns = {
+        cluster: max(returns_data[crypto] for crypto in cryptos)
+        for cluster, cryptos in crypto_by_cluster.items()
+        if cluster in unrepresented_clusters
+    }
+    
+    sorted_unrepresented_clusters = sorted(
+        unrepresented_clusters, 
+        key=lambda cluster: cluster_best_returns[cluster],
+        reverse=True
+    )
+    
+    # For each unrepresented cluster, select the crypto with the best return
+    for cluster in sorted_unrepresented_clusters:
+        if len(selected_cryptos) >= n_cryptos:
+            break
+            
+        # Choose the crypto with the best return from this cluster
+        best_crypto = max(
+            crypto_by_cluster[cluster],
+            key=lambda crypto: returns_data[crypto]
+        )
+        selected_cryptos.append(best_crypto)
+    
+    # Step 5: If we still need more cryptos, use return metrics for selection
+    if len(selected_cryptos) < n_cryptos:
+        remaining_cryptos = [
+            crypto for crypto in crypto_candidates 
+            if crypto not in selected_cryptos
+        ]
+        
+        sorted_remaining = sorted(
+            remaining_cryptos,
+            key=lambda crypto: returns_data[crypto],
+            reverse=True
+        )
+        
+        needed = n_cryptos - len(selected_cryptos)
+        selected_cryptos.extend(sorted_remaining[:needed])
+        
+        full_new_portfolio = existing_stocks + selected_cryptos
+    return selected_cryptos, full_new_portfolio
+
+
+
+
+def supplement_set_with_cryptos(portfolio_set:dict, cryptos_list, tickers_with_labels, df_prices, n_cryptos=3, seed=30, random_alloc=False):
+    """
+    Loop based function based on "select_complementary_cryptos"
+    """
+    random.seed(seed)
+    new_portfolios_w_cryptos = dict()
+    
+    for key, portfolio in portfolio_set.items():
+        if random_alloc:
+            indices = random.sample(range(len(cryptos_list)), n_cryptos)
+            cryptos = [cryptos_list[i] for i in indices]
+            crypto_supplemented_port = existing_stocks + cryptos
+        else:
+            existing_stocks = list(portfolio.keys())
+            cryptos, crypto_supplemented_port = select_complementary_cryptos(existing_stocks=existing_stocks, crypto_candidates=cryptos_list, cluster_assignments=tickers_with_labels, 
+                                                                              df_prices = df_prices, n_cryptos=n_cryptos, verbose=False)
+        
+        new_portfolios_w_cryptos[key] = crypto_supplemented_port
+
+    return new_portfolios_w_cryptos
 
 
 
