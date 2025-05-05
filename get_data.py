@@ -38,7 +38,7 @@ for ticker_to_drop in doubly_listed_tickers:
 df_all_stocks = df_all_stocks.ffill() #ffill again after concatenating the tickers
 
 
-df_all_stocks.to_csv('stocks_data.csv', index=True)
+df_all_stocks.to_csv('stocks_data_new.csv', index=True)
 
 
 
@@ -56,4 +56,4 @@ cryptos_df = get_close_prices(crypto_tickers_fixed, period = 2, start = '2022-01
 
 print('Number of NA values in cryptos_df is ', df.isna().any().sum())
 
-cryptos_df.to_csv('cryptos_data.csv', index=True)
+cryptos_df.to_csv('cryptos_data_new.csv', index=True)

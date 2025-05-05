@@ -21,7 +21,7 @@ from functions import sharpe_ratio_calculation
 #CLAUDE's algorithm for selecting complementing cryptos:
 #After this we want to reoptimize the whole portfolio for max sharpe or min var
 
-def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_assignments, df_prices, n_cryptos=3, verbose=False):
+def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_assignments, df_prices, n_cryptos=3, verbose=False, rf_rate=0.02):
     """
     Select cryptocurrencies to complement an existing stock portfolio based on
     cluster diversification, with a special case for when all cryptos are in the same cluster.
@@ -41,7 +41,7 @@ def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_ass
         print('Cluster Distribution in the original portfolio: \n')
         print(pd.DataFrame(columns = ['ticker', 'cluster'], data=clusters_dict.items()).groupby('cluster').count())
 
-    returns_data = dict(sharpe_ratio_calculation(df_prices, rf_rate_annual = 0.02))
+    returns_data = dict(sharpe_ratio_calculation(df_prices, rf_rate_annual = rf_rate))
     # Step 1: Identify clusters already represented in the portfolio
     stock_clusters = set(cluster_assignments[stock] for stock in existing_stocks)
     
@@ -110,7 +110,7 @@ def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_ass
         needed = n_cryptos - len(selected_cryptos)
         selected_cryptos.extend(sorted_remaining[:needed])
         
-        full_new_portfolio = existing_stocks + selected_cryptos
+    full_new_portfolio = existing_stocks + selected_cryptos
     return selected_cryptos, full_new_portfolio
 
 
@@ -125,6 +125,7 @@ def supplement_set_with_cryptos(portfolio_set:dict, cryptos_list, tickers_with_l
     
     for key, portfolio in portfolio_set.items():
         if random_alloc:
+            existing_stocks = list(portfolio.keys())
             indices = random.sample(range(len(cryptos_list)), n_cryptos)
             cryptos = [cryptos_list[i] for i in indices]
             crypto_supplemented_port = existing_stocks + cryptos
@@ -142,7 +143,7 @@ def supplement_set_with_cryptos(portfolio_set:dict, cryptos_list, tickers_with_l
 
 
 
-def reoptimize_weights(df_prices, portfolio_set, how='max_sharpe', min_weight=0.01):
+def reoptimize_weights(df_prices, portfolio_set, how='max_sharpe', min_weight=0.01, rf_rate=0.02):
     new_set = dict()
     for key, portfolio in portfolio_set.items():
         if isinstance(portfolio, dict):
@@ -159,17 +160,25 @@ def reoptimize_weights(df_prices, portfolio_set, how='max_sharpe', min_weight=0.
         
             mu = expected_returns.mean_historical_return(prices_df)  # Expected returns
             S = risk_models.sample_cov(prices_df)  # Covariance matrix
+            try:
 
-            ef = EfficientFrontier(mu, S, weight_bounds=(min_weight, 1))
-            weights = ef.max_sharpe()
-            new_portfolio = ef.clean_weights()
+                ef = EfficientFrontier(mu, S, weight_bounds=(min_weight, 1))
+                weights = ef.max_sharpe(risk_free_rate=rf_rate)
+                new_portfolio = ef.clean_weights()
+            except:
+                ef = EfficientFrontier(mu, S, weight_bounds=(min_weight - 0.01, 1))
+                weights = ef.max_sharpe(risk_free_rate=rf_rate)
+                new_portfolio = ef.clean_weights()
 
+        new_portfolio = dict(new_portfolio)
         new_set[key] = new_portfolio
-        
+
     return new_set
     
 
 def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_sims=100, t=100, distribution_model='multivar_norm', plot=False, initialPortfolio=100):
+    returns_for_portfolio = returns_for_portfolio[list(portfolio_dict.keys())]
+    
     mean_returns = returns_for_portfolio.mean()
     cov_matrix = returns_for_portfolio.cov()
 
@@ -192,7 +201,7 @@ def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_si
                 Z = np.random.normal(size=(t, len(portfolio_dict)))  # Shape: (T, n_assets)
                 daily_returns = meanM + Z @ L.T  # Shape: (T, n_assets)
             elif distribution_model == 'multivar_t':
-                df = 5  # degrees of freedom
+                df = 10  # degrees of freedom
                 Z = np.random.normal(size=(t, len(portfolio_dict)))
                 chi2 = np.random.chisquare(df, size=(t, 1))
                 Z_t = Z / np.sqrt(chi2 / df)  # now Z_t has t-distributed marginals
@@ -250,9 +259,13 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
 
         #Sortino ratio
         downside_returns = np.minimum(0, daily_returns - rf_daily)
-        downside_std = np.sqrt(np.mean(downside_returns ** 2))
-        if downside_std == 0:
-            sortino_ratio = np.nan
+
+        with np.errstate(over='ignore'):  # Suppress the warning
+            squared_returns = np.square(downside_returns, dtype=np.float64)
+            downside_std = np.sqrt(np.mean(squared_returns))
+
+        if np.isclose(downside_std, 0) or np.isnan(downside_std):
+            sortino_ratio = np.nan  # or set to a default value
         else:
             sortino_ratio = (mean_daily_return_for_portfolio - rf_daily) / downside_std
         
@@ -295,8 +308,8 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
     normality_results_df = pd.DataFrame(results_normality_test).T
     normality_results_df['normal'] = normality_results_df['p_value'] > 0.05  # True if data is likely normal
 
-    print('Normality Test results: \n')
-    print(normality_results_df)
+    #print('Normality Test results: \n')
+    #print(normality_results_df)
 
     return simulations_results_dict, subset_statistics_df, normality_results_df
 
