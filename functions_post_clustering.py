@@ -225,6 +225,39 @@ def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_si
     return portfolio_sims
 
 
+def calculate_cumulative_returns(daily_returns):
+    # Add 1 to convert returns to growth factors
+    growth_factors = daily_returns + 1
+    
+    # Calculate the cumulative product along the time axis
+    cumulative_growth = np.cumprod(growth_factors, axis=0)
+    
+    # Calculate the cumulative return (final value - 1)
+    cumulative_returns = cumulative_growth[-1, :] - 1
+    
+    return cumulative_returns
+
+
+
+
+def calculate_var_cvar(daily_returns, confidence_level=0.05, initial_value=100):
+        # Sort returns from worst to best
+        sorted_returns = np.sort(daily_returns.flatten())
+        
+        # Calculate VaR
+        var_index = int(confidence_level * len(sorted_returns))
+        var = abs(sorted_returns[var_index])
+        
+        # Calculate CVaR (Expected Shortfall)
+        cvar = abs(np.mean(sorted_returns[:var_index]))
+        
+        # Convert to monetary values
+        var_value = var * initial_value
+        cvar_value = cvar * initial_value
+        
+        return var_value, cvar_value
+
+
 
 
 #Simulations for the whole subset
@@ -239,10 +272,13 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
 
         simulations_results_dict[i] = portfolio_sims
 
+
+
+
         #CALCULATE STATISTICS PER PORTFOLIO:
         daily_returns = (portfolio_sims[1:, :] - portfolio_sims[:-1, :]) / portfolio_sims[:-1, :] #DO WE WANT TO ADD FIRST ROW OF 100 VALUES SO THAT WE HAVE A FULL THING?
         #average cumulative return 
-        cumulative_returns_per_simulation = np.sum(daily_returns, axis=0)
+        cumulative_returns_per_simulation = calculate_cumulative_returns(daily_returns)
         mean_cumulative_return_for_portfolio = np.mean(cumulative_returns_per_simulation)
         #average daily return
         mean_daily_return_for_portfolio = np.mean(daily_returns)
@@ -255,7 +291,21 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
         sharpe_daily = (mean_daily_return_for_portfolio - rf_daily) / std_daily_return
         sharpe_cumulative = (mean_cumulative_return_for_portfolio - rf_cumulative)  / std_cumulative_return
         sharpe_annual = sharpe_daily * np.sqrt(252)
-        sharpe_cumulative_annual = sharpe_cumulative * np.sqrt(252)
+        #sharpe_cumulative_annual = sharpe_cumulative * np.sqrt(252)
+
+        #Diversification Ratio
+        asset_returns = {}
+        asset_weights = portfolio_dict
+        asset_stdevs = {}
+        
+        for ticker in portfolio_dict.keys():
+            asset_historical_returns = return_df[ticker].values
+            asset_stdevs[ticker] = np.std(asset_historical_returns)
+        
+        weighted_sum_stdevs = sum(asset_weights[ticker] * asset_stdevs[ticker] for ticker in asset_weights)
+        portfolio_stdev = std_daily_return
+        diversification_ratio = weighted_sum_stdevs / portfolio_stdev
+
 
         #Sortino ratio
         downside_returns = np.minimum(0, daily_returns - rf_daily)
@@ -272,14 +322,18 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
         sortino_annual = sortino_ratio * np.sqrt(252)
 
         #VaR:
-        last_period_returns = portfolio_sims[-1:]
+        # last_period_returns = portfolio_sims[-1:]
         initial_portfolio_value = 100
-        portfolio_returns = (last_period_returns - initial_portfolio_value) / initial_portfolio_value
-        VaR = np.percentile(portfolio_returns, 5)
-        VaR_final = abs(VaR) * initial_portfolio_value
-        #CVaR
-        worst_losses = portfolio_returns[portfolio_returns <= VaR]
-        CVaR_final = abs(worst_losses.mean()) * initial_portfolio_value
+        # portfolio_returns = (last_period_returns - initial_portfolio_value) / initial_portfolio_value
+        # VaR = np.percentile(portfolio_returns, 5)
+        # VaR_final = abs(VaR) * initial_portfolio_value
+        # #CVaR
+        # worst_losses = portfolio_returns[portfolio_returns <= VaR]
+        # CVaR_final = abs(worst_losses.mean()) * initial_portfolio_value
+
+        VaR_final, CVaR_final = calculate_var_cvar(daily_returns, 
+                                                  confidence_level=0.05, 
+                                                  initial_value=initial_portfolio_value)
 
 
         stat_results = pd.DataFrame({'mean_cumulative_return': [mean_cumulative_return_for_portfolio],
@@ -289,11 +343,11 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
                                      'sharpe_daily': [sharpe_daily],
                                      'sharpe_cumulative': [sharpe_cumulative],
                                      'sharpe_annual': [sharpe_annual],
-                                     'sharpe_cumulative_annual': [sharpe_cumulative_annual], 
                                      'VaR': [VaR_final],
                                      'CVaR': [CVaR_final],
                                      'sortino': [sortino_ratio],
-                                     'sortino_annual': [sortino_annual]})
+                                     'sortino_annual': [sortino_annual], 
+                                     'diversification_ratio': diversification_ratio})
 
         subset_statistics_df = pd.concat([subset_statistics_df, stat_results])
 
@@ -309,7 +363,11 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
     normality_results_df['normal'] = normality_results_df['p_value'] > 0.05  # True if data is likely normal
 
     #print('Normality Test results: \n')
-    #print(normality_results_df)
+    #print(normality_results_df)    
+
+
+
+
 
     return simulations_results_dict, subset_statistics_df, normality_results_df
 
