@@ -293,20 +293,6 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
         sharpe_annual = sharpe_daily * np.sqrt(252)
         #sharpe_cumulative_annual = sharpe_cumulative * np.sqrt(252)
 
-        #Diversification Ratio
-        asset_returns = {}
-        asset_weights = portfolio_dict
-        asset_stdevs = {}
-        
-        for ticker in portfolio_dict.keys():
-            asset_historical_returns = return_df[ticker].values
-            asset_stdevs[ticker] = np.std(asset_historical_returns)
-        
-        weighted_sum_stdevs = sum(asset_weights[ticker] * asset_stdevs[ticker] for ticker in asset_weights)
-        portfolio_stdev = std_daily_return
-        diversification_ratio = weighted_sum_stdevs / portfolio_stdev
-
-
         #Sortino ratio
         downside_returns = np.minimum(0, daily_returns - rf_daily)
 
@@ -340,14 +326,13 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
                                      'mean_daily_return': [mean_daily_return_for_portfolio],
                                      'std_cumulative_return': [std_cumulative_return],
                                      'std_daily_return': [std_daily_return],
-                                     'sharpe_daily': [sharpe_daily],
-                                     'sharpe_cumulative': [sharpe_cumulative],
-                                     'sharpe_annual': [sharpe_annual],
+                                     #'sharpe_daily': [sharpe_daily],
+                                     #'sharpe_cumulative': [sharpe_cumulative],
+                                     'sharpe_annualized': [sharpe_annual],
                                      'VaR': [VaR_final],
                                      'CVaR': [CVaR_final],
-                                     'sortino': [sortino_ratio],
-                                     'sortino_annual': [sortino_annual], 
-                                     'diversification_ratio': diversification_ratio})
+                                     #'sortino': [sortino_ratio],
+                                     'sortino_annualized': [sortino_annual]})
 
         subset_statistics_df = pd.concat([subset_statistics_df, stat_results])
 

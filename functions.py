@@ -435,110 +435,110 @@ def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', re
 
 
 
-def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list=None, return_mode='arithmetic', n_init=1):
+# def test_for_silhouette_score(df, n_clusters_list, method='kmeans', linkage_list=None, return_mode='arithmetic', n_init=1):
 
-    """ runs the clustering for one of the 3 possible models and the Silhouette score calculation
-    parameters:
-    -----------
-        df: dataframe with the stock prices
-        n_clusters_list: list of number of clusters like [3,5,7] etc. that we want to find out the silhouette score for
-        model_name: kmeans, kshape or ahc (aggregated hierarchical clustering)
-        linkage_list: only for ahc, what kind of linkages to use
-    returns:
-    --------
-        DataFrame of the silhouette scores per N clusters and type of Linkage
-    """
+#     """ runs the clustering for one of the 3 possible models and the Silhouette score calculation
+#     parameters:
+#     -----------
+#         df: dataframe with the stock prices
+#         n_clusters_list: list of number of clusters like [3,5,7] etc. that we want to find out the silhouette score for
+#         model_name: kmeans, kshape or ahc (aggregated hierarchical clustering)
+#         linkage_list: only for ahc, what kind of linkages to use
+#     returns:
+#     --------
+#         DataFrame of the silhouette scores per N clusters and type of Linkage
+#     """
 
-    distance_matrix_df = distance_matrix_calc(df, return_mode=return_mode, method=method)
+#     distance_matrix_df = distance_matrix_calc(df, return_mode=return_mode, method=method)
 
-    silhouettes = []
+#     silhouettes = []
 
-    if method == 'ahc':
-        if linkage_list is None:
-            raise ValueError("You must provide a list of linkages when using method='ahc'")
+#     if method == 'ahc':
+#         if linkage_list is None:
+#             raise ValueError("You must provide a list of linkages when using method='ahc'")
         
-        for linkage in linkage_list:
-            for n in n_clusters_list:
-                labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, linkage=linkage, return_mode=return_mode)
-                score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
-                silhouettes.append({
-                    'clusters': n,
-                    'silhouette_score': float(score),
-                    'method': method,
-                    'linkage': linkage
-                })
+#         for linkage in linkage_list:
+#             for n in n_clusters_list:
+#                 labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, linkage=linkage, return_mode=return_mode)
+#                 score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
+#                 silhouettes.append({
+#                     'clusters': n,
+#                     'silhouette_score': float(score),
+#                     'method': method,
+#                     'linkage': linkage
+#                 })
     
-    elif method == 'kmeans':
-        for n in n_clusters_list:
-            labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode, n_init=n_init)
-            score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
-            silhouettes.append({
-                'clusters': n,
-                'silhouette_score': float(score),
-                'method': method
-            })
+#     elif method == 'kmeans':
+#         for n in n_clusters_list:
+#             labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode, n_init=n_init)
+#             score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
+#             silhouettes.append({
+#                 'clusters': n,
+#                 'silhouette_score': float(score),
+#                 'method': method
+#             })
     
-    else: 
-        for n in n_clusters_list:
-            labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
+#     else: 
+#         for n in n_clusters_list:
+#             labels, _, _, _ = run_clustering_model(df, n_clus=n, model_name=method, return_mode=return_mode)
 
-            score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
+#             score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
 
-            silhouettes.append({
-                'clusters': n,
-                'silhouette_score': float(score),
-                'method': method
-            })
+#             silhouettes.append({
+#                 'clusters': n,
+#                 'silhouette_score': float(score),
+#                 'method': method
+#             })
 
-    return pd.DataFrame(silhouettes)
-
-
+#     return pd.DataFrame(silhouettes)
 
 
 
-def label_balance(df_dict:dict, window, method, return_mode, n_clus, linkage):
-
-    # Suppress all warnings
-    warnings.filterwarnings('ignore')
 
 
-    df_name = list(df_dict.keys())[0]
+# def label_balance(df_dict:dict, window, method, return_mode, n_clus, linkage):
 
-    df_smooth = df_dict[df_name].rolling(window=window, center=True).mean()
-    _, tickers_with_labels, _, _ = run_clustering_model(df_smooth, n_clus=n_clus, model_name=method, linkage=linkage, return_mode=return_mode, n_init=3)
+#     # Suppress all warnings
+#     warnings.filterwarnings('ignore')
 
-    res = pd.DataFrame(list(tickers_with_labels.items()), columns=['ticker', 'label'])
-    out = res.groupby('label').count()
 
-    #if not ((out['ticker'] / len(joined_df.columns)) >= 0.6).any():
-    max_percentage_per_cluster = (out['ticker'] / len(df_smooth.columns)).max()
-    min_percentage_per_cluster = (out['ticker'] / len(df_smooth.columns)).min()
-    min_max_delta = round(max_percentage_per_cluster - min_percentage_per_cluster, 4)
-        #print(f'Window - {window},method - {method},return mode - {return_mode} \nMax {round(max_percentage_per_cluster * 100, 2)} % of observations per cluster  \nMin {round(min_percentage_per_cluster*100, 2)} % of observations per cluster')
+#     df_name = list(df_dict.keys())[0]
 
-    # out['return_mode'] = return_mode
-    # out['window_size'] = window
-    # out['method'] = method
-    # out['clusters'] = n_clus
-    # out['linkage'] = linkage
-    # out['df_mode'] = df_name
-    if method != 'ahc':
-        linkage = 'not_applicable'
+#     df_smooth = df_dict[df_name].rolling(window=window, center=True).mean()
+#     _, tickers_with_labels, _, _ = run_clustering_model(df_smooth, n_clus=n_clus, model_name=method, linkage=linkage, return_mode=return_mode, n_init=3)
 
-    output = {'return_mode': [return_mode], 
-              'clusters': [n_clus],
-              'window_size': [window], 
-              'method': [method],
-              'linkage': [linkage], 
-              'df_mode': [df_name], 
-               'min_per_cluster': [round(min_percentage_per_cluster, 4)],
-              'max_per_cluster': [round(max_percentage_per_cluster, 4)],
-              'min_max_delta': [min_max_delta]}
+#     res = pd.DataFrame(list(tickers_with_labels.items()), columns=['ticker', 'label'])
+#     out = res.groupby('label').count()
+
+#     #if not ((out['ticker'] / len(joined_df.columns)) >= 0.6).any():
+#     max_percentage_per_cluster = (out['ticker'] / len(df_smooth.columns)).max()
+#     min_percentage_per_cluster = (out['ticker'] / len(df_smooth.columns)).min()
+#     min_max_delta = round(max_percentage_per_cluster - min_percentage_per_cluster, 4)
+#         #print(f'Window - {window},method - {method},return mode - {return_mode} \nMax {round(max_percentage_per_cluster * 100, 2)} % of observations per cluster  \nMin {round(min_percentage_per_cluster*100, 2)} % of observations per cluster')
+
+#     # out['return_mode'] = return_mode
+#     # out['window_size'] = window
+#     # out['method'] = method
+#     # out['clusters'] = n_clus
+#     # out['linkage'] = linkage
+#     # out['df_mode'] = df_name
+#     if method != 'ahc':
+#         linkage = 'not_applicable'
+
+#     output = {'return_mode': [return_mode], 
+#               'clusters': [n_clus],
+#               'window_size': [window], 
+#               'method': [method],
+#               'linkage': [linkage], 
+#               'df_mode': [df_name], 
+#                'min_per_cluster': [round(min_percentage_per_cluster, 4)],
+#               'max_per_cluster': [round(max_percentage_per_cluster, 4)],
+#               'min_max_delta': [min_max_delta]}
     
-    output_df_one_row = pd.DataFrame(output)
+#     output_df_one_row = pd.DataFrame(output)
     
 
-    return output_df_one_row #out, max_percentage_per_cluster, min_percentage_per_cluster
+#     return output_df_one_row #out, max_percentage_per_cluster, min_percentage_per_cluster
 
 
 
