@@ -11,6 +11,7 @@ from pypfopt import expected_returns
 from scipy.stats import f_oneway
 from scipy.stats import kruskal
 from scipy.stats import normaltest
+from scipy.stats import mstats
 
 import scikit_posthocs as sp
 
@@ -176,9 +177,26 @@ def reoptimize_weights(df_prices, portfolio_set, how='max_sharpe', min_weight=0.
     return new_set
     
 
-def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_sims=100, t=100, distribution_model='multivar_norm', plot=False, initialPortfolio=100):
+
+
+
+
+
+def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_sims=100, t=100, distribution_model='multivar_norm', 
+                   plot=False, initialPortfolio=100, winsorize=False, winsorize_limits=(0.01, 0.01)):
     returns_for_portfolio = returns_for_portfolio[list(portfolio_dict.keys())]
     
+    if winsorize:
+
+        winsorized_returns = returns_for_portfolio.copy()
+        
+        for col in winsorized_returns.columns:
+            winsorized_returns[col] = mstats.winsorize(winsorized_returns[col], limits=winsorize_limits)
+        
+
+        returns_for_portfolio = winsorized_returns
+
+
     mean_returns = returns_for_portfolio.mean()
     cov_matrix = returns_for_portfolio.cov()
 
@@ -193,7 +211,7 @@ def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_si
     for sim in range(n_sims):
 
         if distribution_model == 'bootstrap':
-            sampled_returns = returns_for_portfolio.sample(n=t, replace=True).values
+            sampled_returns = returns_for_portfolio.bfill().sample(n=t, replace=True).values
             portfolio_returns = sampled_returns @ weights
         else:
 
@@ -201,7 +219,7 @@ def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_si
                 Z = np.random.normal(size=(t, len(portfolio_dict)))  # Shape: (T, n_assets)
                 daily_returns = meanM + Z @ L.T  # Shape: (T, n_assets)
             elif distribution_model == 'multivar_t':
-                df = 10  # degrees of freedom
+                df = 25  # degrees of freedom
                 Z = np.random.normal(size=(t, len(portfolio_dict)))
                 chi2 = np.random.chisquare(df, size=(t, 1))
                 Z_t = Z / np.sqrt(chi2 / df)  # now Z_t has t-distributed marginals
@@ -251,9 +269,9 @@ def calculate_var_cvar(daily_returns, confidence_level=0.05, initial_value=100):
         # Calculate CVaR (Expected Shortfall)
         cvar = abs(np.mean(sorted_returns[:var_index]))
         
-        # Convert to monetary values
-        var_value = var * initial_value
-        cvar_value = cvar * initial_value
+        # Convert to monetary values - NOPE
+        var_value = var #* initial_value
+        cvar_value = cvar #* initial_value
         
         return var_value, cvar_value
 
@@ -262,13 +280,20 @@ def calculate_var_cvar(daily_returns, confidence_level=0.05, initial_value=100):
 
 #Simulations for the whole subset
 
-def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims=100, t=100, distribution_model='multivar_norm', rf_annual=0.04):
+def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims=100, t=100, distribution_model='multivar_norm', rf_annual=0.04, seed=30,
+                                       winsorize=False, winsorize_limits=(0.01, 0.01)):
     simulations_results_dict = dict()
     subset_statistics_df = pd.DataFrame()
 
+    random.seed(seed)
+
     for i, portfolio_dict in portfolios_subset.items():
         returns_portfolio = return_df[list(portfolio_dict.keys())]
-        portfolio_sims = run_simulation(portfolio_dict, returns_portfolio, n_sims=n_sims, t=t, distribution_model=distribution_model, plot=False)
+
+        total = sum(portfolio_dict.values())
+        portfolio_dict = {k: v / total for k, v in portfolio_dict.items()}
+
+        portfolio_sims = run_simulation(portfolio_dict, returns_portfolio, n_sims=n_sims, t=t, distribution_model=distribution_model, plot=False, winsorize=winsorize, winsorize_limits=winsorize_limits)
 
         simulations_results_dict[i] = portfolio_sims
 
@@ -279,60 +304,81 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
         daily_returns = (portfolio_sims[1:, :] - portfolio_sims[:-1, :]) / portfolio_sims[:-1, :] #DO WE WANT TO ADD FIRST ROW OF 100 VALUES SO THAT WE HAVE A FULL THING?
         #average cumulative return 
         cumulative_returns_per_simulation = calculate_cumulative_returns(daily_returns)
-        mean_cumulative_return_for_portfolio = np.mean(cumulative_returns_per_simulation)
+        #mean_cumulative_return_for_portfolio = np.mean(cumulative_returns_per_simulation)
         #average daily return
         mean_daily_return_for_portfolio = np.mean(daily_returns)
         #STD
-        std_cumulative_return = np.std(cumulative_returns_per_simulation) # path uncertainty
         std_daily_return = np.std(daily_returns) #return variability per day
+
+        #annualised_return = (1 + mean_cumulative_return_for_portfolio)**(252/t) - 1
+        #annualised_volatility = std_cumulative_return * np.sqrt(252/t)
+
+
+
+
+        final_portfolio_values = portfolio_sims[-1, :]  # Final values across all simulations
+        initial_value = 100  # Your initial portfolio value
+        holding_period_years = t / 252  # Convert days to years
+
+        # Calculate annualized returns 
+        return_for_period = (final_portfolio_values - initial_value) / initial_value
+        annualised_return = (final_portfolio_values / initial_value) ** (1 / holding_period_years) - 1
+        #annualised_return = (1 + return_for_period) ** (1/holding_period_years) - 1
+        mean_return = np.mean(return_for_period)
+        mean_annual_return = np.mean(annualised_return)
+
+
+
+
         #sharpe ratio
         rf_daily = rf_annual / 252
-        rf_cumulative = (1 + rf_annual) ** (daily_returns.shape[0] / 252) - 1
+        #rf_cumulative = (1 + rf_annual) ** (daily_returns.shape[0] / 252) - 1
         sharpe_daily = (mean_daily_return_for_portfolio - rf_daily) / std_daily_return
-        sharpe_cumulative = (mean_cumulative_return_for_portfolio - rf_cumulative)  / std_cumulative_return
+        #sharpe_cumulative = (mean_cumulative_return_for_portfolio - rf_cumulative)  / std_cumulative_return
         sharpe_annual = sharpe_daily * np.sqrt(252)
         #sharpe_cumulative_annual = sharpe_cumulative * np.sqrt(252)
 
         #Sortino ratio
-        downside_returns = np.minimum(0, daily_returns - rf_daily)
+        # downside_returns = np.minimum(0, daily_returns - rf_daily)
 
-        with np.errstate(over='ignore'):  # Suppress the warning
-            squared_returns = np.square(downside_returns, dtype=np.float64)
-            downside_std = np.sqrt(np.mean(squared_returns))
+        # with np.errstate(over='ignore'):  # Suppress the warning
+        #     squared_returns = np.square(downside_returns, dtype=np.float64)
+        #     downside_std = np.sqrt(np.mean(squared_returns))
 
-        if np.isclose(downside_std, 0) or np.isnan(downside_std):
-            sortino_ratio = np.nan  # or set to a default value
-        else:
-            sortino_ratio = (mean_daily_return_for_portfolio - rf_daily) / downside_std
+        # if np.isclose(downside_std, 0) or np.isnan(downside_std):
+        #     sortino_ratio = np.nan  # or set to a default value
+        # else:
+        #     sortino_ratio = (mean_daily_return_for_portfolio - rf_daily) / downside_std
         
-        sortino_annual = sortino_ratio * np.sqrt(252)
+        #sortino_annual = sortino_ratio * np.sqrt(252)
 
         #VaR:
-        # last_period_returns = portfolio_sims[-1:]
+        last_period_returns = portfolio_sims[-1:]
         initial_portfolio_value = 100
-        # portfolio_returns = (last_period_returns - initial_portfolio_value) / initial_portfolio_value
-        # VaR = np.percentile(portfolio_returns, 5)
-        # VaR_final = abs(VaR) * initial_portfolio_value
-        # #CVaR
-        # worst_losses = portfolio_returns[portfolio_returns <= VaR]
-        # CVaR_final = abs(worst_losses.mean()) * initial_portfolio_value
+        portfolio_returns = (last_period_returns - initial_portfolio_value) / initial_portfolio_value
+        VaR = np.percentile(portfolio_returns, 5)
+        VaR_final = abs(VaR) * initial_portfolio_value
+        #CVaR
+        worst_losses = portfolio_returns[portfolio_returns <= VaR]
+        CVaR_final = abs(worst_losses.mean()) * initial_portfolio_value
 
         VaR_final, CVaR_final = calculate_var_cvar(daily_returns, 
-                                                  confidence_level=0.05, 
-                                                  initial_value=initial_portfolio_value)
+                                                 confidence_level=0.05, 
+                                                 initial_value=initial_portfolio_value)
 
 
-        stat_results = pd.DataFrame({'mean_cumulative_return': [mean_cumulative_return_for_portfolio],
-                                     'mean_daily_return': [mean_daily_return_for_portfolio],
-                                     'std_cumulative_return': [std_cumulative_return],
-                                     'std_daily_return': [std_daily_return],
+        stat_results = pd.DataFrame({'annualised_return': [mean_annual_return],
+                                     'mean_period_return': [mean_return],
+                                     #'annualised_volatility': [annualised_volatility],
+                                     #'std_daily_return': [std_daily_return],
                                      #'sharpe_daily': [sharpe_daily],
                                      #'sharpe_cumulative': [sharpe_cumulative],
                                      'sharpe_annualized': [sharpe_annual],
                                      'VaR': [VaR_final],
-                                     'CVaR': [CVaR_final],
+                                     #'CVaR': [CVaR_final],
                                      #'sortino': [sortino_ratio],
-                                     'sortino_annualized': [sortino_annual]})
+                                     #'sortino_annualized': [sortino_annual]
+                                     })
 
         subset_statistics_df = pd.concat([subset_statistics_df, stat_results])
 
