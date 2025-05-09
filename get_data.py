@@ -115,7 +115,7 @@ def get_binance_close_prices(ticker_list, period=1, start='2024-01-01', interval
 #                        'AXS', 'WIF', 'CHZ', 'COMP', 'APE', 'AERO', '1INCH', 'SNX', 'ROSE', 'LPT']
 
 # binance_tickers = [f"{ticker}USDT" for ticker in coinbase_50_cryptos]
-binance_tickers = list(pd.read_csv('cryptos_data.csv').columns)
+binance_tickers = list(pd.read_csv('cryptos_data_new.csv').columns)
 
 df = get_binance_close_prices(binance_tickers, start='2024-01-01', period=1)
 #df = df.drop(columns=['HNTUSDT', 'PEPEUSDT', 'APTUSDT', 'BONKUSDT', 'LDOUSDT', 'APEUSDT']).dropna()
