@@ -213,7 +213,7 @@ def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_si
         if distribution_model == 'bootstrap':
             sampled_returns = returns_for_portfolio.bfill().sample(n=t, replace=True).values
             portfolio_returns = sampled_returns @ weights
-        else:
+        elif distribution_model in ['multivar_norm', 'multivar_t']:
 
             if distribution_model == 'multivar_norm':
                 Z = np.random.normal(size=(t, len(portfolio_dict)))  # Shape: (T, n_assets)
@@ -227,6 +227,10 @@ def run_simulation(portfolio_dict:dict, returns_for_portfolio:pd.DataFrame, n_si
                 daily_returns = meanM + Z_t @ L.T
 
             portfolio_returns = daily_returns @ weights  # Shape: (T,)
+        
+        else:
+            break
+            
         
         
         
