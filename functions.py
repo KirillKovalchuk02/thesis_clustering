@@ -41,7 +41,8 @@ def get_tickers_stocks(min_dayvolume, exchanges, n):
     
     q = EquityQuery('and', [         
                   EquityQuery('is-in', exchanges),
-                  EquityQuery('gt', ['dayvolume', min_dayvolume])
+                  EquityQuery('gt', ['avgdailyvol3m', min_dayvolume]),
+
     ])
 
 
