@@ -460,3 +460,42 @@ def dunn_bonferroni(subset_stats_dfs:dict, metrics='all'):
 
     
     return dunn_tables_results
+
+
+
+
+
+
+
+def estimate_t_df_for_portfolio(returns_df):
+    """
+    Estimate degrees of freedom for each asset, then take the average
+    """
+    from scipy import stats
+    import numpy as np
+    from scipy import optimize
+    
+    asset_dfs = []
+    
+    for column in returns_df.columns:
+        returns = returns_df[column].values
+        
+        # Standardize the returns
+        standardized_returns = (returns - np.mean(returns)) / np.std(returns)
+        
+        # Define negative log-likelihood function for t-distribution
+        def neg_ll(df):
+            return -np.sum(stats.t.logpdf(standardized_returns, df))
+        
+        # Find optimal degrees of freedom
+        result = optimize.minimize_scalar(neg_ll, bounds=(1, 30), method='bounded')
+        
+        asset_dfs.append(result.x)
+    
+    # Return the average df (or minimum for more conservative estimate)
+    avg_df = np.mean(asset_dfs)
+    min_df = np.min(asset_dfs)
+    
+    print(f"Average df: {avg_df:.2f}, Min df: {min_df:.2f}")
+    
+    return avg_df  # or return min_df
