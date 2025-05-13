@@ -1,0 +1,13 @@
+,clusters,silhouette_score,method,linkage,return_mode,n_init,smoothing,window_size/span
+0,4,0.3655736619360911,ahc,single,arithmetic,3,moving_average,10
+1,5,0.3226674619850549,ahc,single,arithmetic,3,moving_average,10
+2,6,0.10293962548292365,ahc,single,arithmetic,3,moving_average,10
+3,7,0.09305484857264484,ahc,single,arithmetic,3,moving_average,10
+4,4,0.3655736619360911,ahc,average,arithmetic,3,moving_average,10
+5,5,0.22713166980505217,ahc,average,arithmetic,3,moving_average,10
+6,6,0.20468083941982843,ahc,average,arithmetic,3,moving_average,10
+7,7,0.1389332601044438,ahc,average,arithmetic,3,moving_average,10
+8,4,0.28789564331434053,ahc,complete,arithmetic,3,moving_average,10
+9,5,0.1298056536657069,ahc,complete,arithmetic,3,moving_average,10
+10,6,0.12982154285025474,ahc,complete,arithmetic,3,moving_average,10
+11,7,0.13022304423920578,ahc,complete,arithmetic,3,moving_average,10

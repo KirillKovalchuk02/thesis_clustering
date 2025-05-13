@@ -68,7 +68,7 @@ def get_tickers_stocks(min_dayvolume, exchanges, n):
 
 
 
-def get_close_prices(ticker_list, period = 2, start = '2022-01-01'):
+def get_close_prices(ticker_list:list, period = 2, start = '2022-01-01'):
     
     date_obj = datetime.strptime(start, '%Y-%m-%d')
     end = date_obj + relativedelta(years=period)
@@ -320,7 +320,7 @@ def run_min_variance(df_price, top_five:dict, risk_model='sample_cov', min_weigh
     results = dict()
     for index, port in top_five.items():
 
-        result = optimize_portfolio(mu, S, port, min_weight_for_top_five, clusters=clusters, min_stocks_per_cluster=min_stocks_per_cluster)
+        result = optimize_portfolio(mu, S, port, min_weight_for_top_five=min_weight_for_top_five, clusters=None, min_stocks_per_cluster=min_stocks_per_cluster)
         results[index] = result
     
     return results

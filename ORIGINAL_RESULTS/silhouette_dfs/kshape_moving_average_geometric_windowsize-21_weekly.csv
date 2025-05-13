@@ -1,0 +1,5 @@
+,clusters,silhouette_score,inertia,method,return_mode,n_init,smoothing,window_size/span
+0,4,-0.022705568074386458,0.025727039696440822,kshape,arithmetic,3,moving_average,21
+1,5,-0.02560591408428126,0.021679733958464235,kshape,arithmetic,3,moving_average,21
+2,6,-0.06969556745630251,0.019483377834382296,kshape,arithmetic,3,moving_average,21
+3,7,-0.07921877123697174,0.018297944182945405,kshape,arithmetic,3,moving_average,21
