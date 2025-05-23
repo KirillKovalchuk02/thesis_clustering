@@ -1,241 +1,241 @@
-Distribution Model for Simulation/Out of Sample,Time Horizon,Portfolio Set,Original Portfolios,Reweighing Method,Cryptos,Clustering method,annualised_return,mean_period_return,sharpe_annualized,sharpe_period,VaR,,,,,,
-bootstrap,126,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.19659589,0.085791504,0.985860793,0.590734887,1.464466524,,,,,,
-bootstrap,126,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.205088785,0.094679018,1.890677426,1.219286752,0.761359765,,,,,,
-bootstrap,126,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.180806647,0.072819172,0.650354363,0.347314471,2.027957071,,,,,,
-bootstrap,126,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.185009587,0.080179764,0.881474562,0.520775043,1.532380588,,,,,,
-bootstrap,126,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.380949649,0.156829859,1.455731835,0.832284631,2.166035597,,,,,,
-bootstrap,126,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.371189845,0.153334205,1.441869515,0.827063904,2.120884634,,,,,,
-bootstrap,126,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.372747527,0.153815989,1.438934991,0.824550308,2.133910247,,,,,,
-bootstrap,126,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.391261132,0.166892083,1.838420185,1.094267115,1.704764287,,,,,,
-bootstrap,126,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.391324069,0.166914699,1.838463029,1.094269945,1.704671403,,,,,,
-bootstrap,126,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.341214194,0.147766307,1.742792369,1.052938568,1.552343578,,,,,,
-bootstrap,189,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.186046373,0.131835906,0.923054213,0.747056163,1.477312922,,,,,,
-bootstrap,189,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.201349496,0.14543055,1.846374655,1.532657964,0.767765896,,,,,,
-bootstrap,189,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.162158834,0.111728964,0.564347539,0.438040893,2.045292445,,,,,,
-bootstrap,189,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.173858655,0.122954345,0.813524055,0.655260374,1.546430291,,,,,,
-bootstrap,189,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.354213386,0.244720222,1.338150175,1.060274155,2.185593183,,,,,,
-bootstrap,189,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.345492181,0.2390453,1.326277616,1.052328949,2.139461303,,,,,,
-bootstrap,189,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.346881415,0.239897817,1.323974999,1.050077581,2.153669299,,,,,,
-bootstrap,189,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.372876072,0.2606794,1.738421431,1.396406685,1.714182075,,,,,,
-bootstrap,189,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.372927578,0.260711811,1.738415546,1.396385715,1.714031543,,,,,,
-bootstrap,189,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.326720149,0.22990044,1.655539971,1.338410829,1.566571486,,,,,,
-bootstrap,252,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.180648576,0.17980599,0.891566555,0.889008973,1.484034449,,,,,,
-bootstrap,252,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.19956277,0.198676296,1.825959959,1.821269861,0.770907693,,,,,,
-bootstrap,252,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.16845841,0.16766936,0.780666713,0.778384557,1.554093824,,,,,,
-bootstrap,252,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.15289892,0.152134969,0.522398903,0.520634619,2.053620795,,,,,,
-bootstrap,252,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.340823594,0.339110505,1.280210049,1.276140739,2.194789493,,,,,,
-bootstrap,252,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.332714622,0.331049176,1.269616603,1.265606001,2.148371342,,,,,,
-bootstrap,252,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.333779638,0.332106912,1.26684135,1.262833106,2.163250714,,,,,,
-bootstrap,252,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.363829228,0.36204933,1.689175056,1.684073414,1.718536526,,,,,,
-bootstrap,252,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.363891744,0.362111465,1.689254857,1.684152679,1.718371714,,,,,,
-bootstrap,252,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.319485213,0.317951976,1.61273133,1.60800974,1.573690863,,,,,,
-multivar_norm,126,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.196541345,0.085736355,1.007645438,0.604046565,1.534983811,,,,,,
-multivar_norm,126,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.204919083,0.094594229,1.905227042,1.227515856,0.8061183,,,,,,
-multivar_norm,126,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.181266306,0.072965052,0.664037127,0.355392239,2.118425581,,,,,,
-multivar_norm,126,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.185218173,0.080268868,0.894903453,0.528969859,1.586527326,,,,,,
-multivar_norm,126,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.381575603,0.157043021,1.463245399,0.835356528,2.275816268,,,,,,
-multivar_norm,126,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.37172859,0.153527497,1.446836278,0.828750363,2.236485359,,,,,,
-multivar_norm,126,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.373424466,0.154054024,1.447308295,0.828190696,2.244550617,,,,,,
-multivar_norm,126,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.39164253,0.167034154,1.847903063,1.098459735,1.819809364,,,,,,
-multivar_norm,126,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.391713169,0.167058963,1.847987933,1.09848062,1.820046962,,,,,,
-multivar_norm,126,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.341622743,0.147901397,1.753357455,1.057855744,1.639057475,,,,,,
-multivar_norm,189,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.185772498,0.131627509,0.936898674,0.758247018,1.547787976,,,,,,
-multivar_norm,189,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.201287391,0.145385225,1.857210489,1.541169784,0.813202049,,,,,,
-multivar_norm,189,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.162539675,0.111983543,0.574416028,0.446160109,2.13559134,,,,,,
-multivar_norm,189,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.17412574,0.123136113,0.823534767,0.663340332,1.599582906,,,,,,
-multivar_norm,189,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.354678269,0.245019325,1.343855856,1.06428317,2.294895369,,,,,,
-multivar_norm,189,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.345974388,0.239360266,1.330305674,1.055049145,2.255144504,,,,,,
-multivar_norm,189,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.347335556,0.240194363,1.330047,1.05442428,2.263201771,,,,,,
-multivar_norm,189,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.373254273,0.26092935,1.745437743,1.401405841,1.835454995,,,,,,
-multivar_norm,189,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.373315682,0.260968897,1.745487462,1.401430656,1.835705484,,,,,,
-multivar_norm,189,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.327062385,0.230133353,1.663485723,1.344297885,1.652934732,,,,,,
-multivar_norm,252,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.180757422,0.179914109,0.903739379,0.901146364,1.554070697,,,,,,
-multivar_norm,252,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.199488675,0.198602401,1.833289996,1.828572766,0.816594218,,,,,,
-multivar_norm,252,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.152858425,0.152094425,0.528428552,0.526646149,2.144338026,,,,,,
-multivar_norm,252,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.168546648,0.167757059,0.788024756,0.785720784,1.606137114,,,,,,
-multivar_norm,252,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.341049696,0.339335042,1.283733233,1.27964554,2.304494883,,,,,,
-multivar_norm,252,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.33283037,0.331164,1.271403786,1.267380896,2.264639785,,,,,,
-multivar_norm,252,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.334127343,0.33245232,1.271008146,1.266979265,2.272725652,,,,,,
-multivar_norm,252,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.364138685,0.36235681,1.694675452,1.689547135,1.843122952,,,,,,
-multivar_norm,252,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.364199852,0.362417603,1.694721231,1.689592491,1.843375717,,,,,,
-multivar_norm,252,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.319827352,0.318292066,1.618769785,1.614021573,1.65975416,,,,,,
-multivar_t,126,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.198209534,0.0858913,0.977353153,0.581272684,1.596054437,,,,,,
-multivar_t,126,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.205397947,0.094637762,1.834463264,1.17925487,0.839722261,,,,,,
-multivar_t,126,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.183144197,0.072719137,0.645409392,0.339396722,2.201812084,,,,,,
-multivar_t,126,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.18637795,0.080151302,0.865872823,0.506850792,1.649778804,,,,,,
-multivar_t,126,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.38424167,0.156745507,1.415096547,0.800020692,2.367581088,,,,,,
-multivar_t,126,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.374305013,0.153247826,1.399094436,0.793715859,2.326706129,,,,,,
-multivar_t,126,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.375921676,0.153729781,1.399412765,0.79307045,2.334829269,,,,,,
-multivar_t,126,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.393522791,0.166882527,1.783527208,1.05357051,1.894309902,,,,,,
-multivar_t,126,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.39358845,0.166904809,1.783579014,1.053570226,1.894567126,,,,,,
-multivar_t,126,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.343043591,0.147749713,1.691041062,1.014377251,1.70601071,,,,,,
-multivar_t,189,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.186291265,0.131682015,0.901858794,0.727765812,1.609607559,,,,,,
-multivar_t,189,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.201407786,0.1453738,1.78360948,1.478879524,0.84699779,,,,,,
-multivar_t,189,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.163030012,0.111746885,0.553290646,0.426854944,2.219842594,,,,,,
-multivar_t,189,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.174479322,0.123048807,0.792306634,0.635947345,1.663528056,,,,,,
-multivar_t,189,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.355305928,0.2446749,1.292008816,1.019606155,2.387298488,,,,,,
-multivar_t,189,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.346509548,0.238989507,1.278751623,1.010649133,2.346027869,,,,,,
-multivar_t,189,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.347955468,0.239866298,1.278823198,1.010254181,2.354259424,,,,,,
-multivar_t,189,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.373757364,0.260757438,1.677279822,1.343679157,1.910744969,,,,,,
-multivar_t,189,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.373818682,0.26079675,1.677339972,1.343712554,1.910993459,,,,,,
-multivar_t,189,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.32741077,0.22995972,1.597992322,1.288719848,1.720912645,,,,,,
-multivar_t,252,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.181185077,0.180334566,0.869277245,0.866752546,1.616153387,,,,,,
-multivar_t,252,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.199670631,0.198781964,1.761570199,1.75702037,0.850583348,,,,,,
-multivar_t,252,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.153572682,0.152795942,0.510214549,0.508454186,2.228772984,,,,,,
-multivar_t,252,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.169023081,0.16822568,0.758806965,0.75655645,1.670054042,,,,,,
-multivar_t,252,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.34188668,0.340154468,1.235091016,1.231104773,2.397452178,,,,,,
-multivar_t,252,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.333693704,0.332010186,1.223431865,1.219508528,2.355936882,,,,,,
-multivar_t,252,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.334970384,0.333278241,1.22294783,1.219019086,2.364300552,,,,,,
-multivar_t,252,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.364699139,0.362905425,1.62876381,1.623789995,1.91844111,,,,,,
-multivar_t,252,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.364754875,0.362960815,1.628801684,1.623827488,1.918696006,,,,,,
-multivar_t,252,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.32025415,0.318709575,1.555618865,1.551016526,1.727706367,,,,,,
-bootstrap,126,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.350640289,0.15332935,2.122885494,1.304349033,1.338812933,,,,,,
-bootstrap,126,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.294298152,0.133782254,2.70514331,1.722754478,0.827638939,,,,,,
-bootstrap,126,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.373231907,0.157764869,1.773728507,1.05690141,1.689068066,,,,,,
-bootstrap,126,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.311935854,0.139519323,2.223888226,1.392437531,1.09180972,,,,,,
-bootstrap,126,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.533636459,0.218018762,2.354372804,1.374074092,1.838895112,,,,,,
-bootstrap,126,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.527898625,0.216058689,2.346886342,1.371783569,1.823950472,,,,,,
-bootstrap,126,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.528523835,0.216291385,2.347387164,1.371859056,1.823350953,,,,,,
-bootstrap,126,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.386421129,0.170821419,2.715091746,1.68335399,1.115665898,,,,,,
-bootstrap,126,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.386457401,0.170835082,2.715137954,1.683364534,1.115683898,,,,,,
-bootstrap,126,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.362816271,0.161379226,2.664937593,1.662093226,1.052474172,,,,,,
-bootstrap,189,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.339673214,0.239573855,2.046089615,1.662823408,1.351911625,,,,,,
-bootstrap,189,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.289431301,0.207325758,2.644120788,2.179174963,0.83527046,,,,,,
-bootstrap,189,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.354988128,0.247260446,1.681494547,1.351378198,1.704296322,,,,,,
-bootstrap,189,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.30407752,0.216504258,2.156408644,1.766157203,1.101635584,,,,,,
-bootstrap,189,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.504725776,0.346057215,2.23270057,1.774767565,1.854831714,,,,,,
-bootstrap,189,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.499548137,0.342778341,2.226541745,1.771067996,1.840061033,,,,,,
-bootstrap,189,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.500215658,0.343200512,2.227151144,1.771394746,1.839080901,,,,,,
-bootstrap,189,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.377330432,0.26695355,2.638822354,2.149098493,1.126378479,,,,,,
-bootstrap,189,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.377359693,0.266972614,2.638802784,2.149072521,1.126398579,,,,,,
-bootstrap,189,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.354730237,0.251669582,2.593221621,2.117689087,1.062384185,,,,,,
-bootstrap,252,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.333440732,0.331845933,2.005650271,1.999888173,1.357285672,,,,,,
-bootstrap,252,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.287115505,0.285801728,2.616441925,2.609409203,0.838890353,,,,,,
-bootstrap,252,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.344805113,0.343101511,1.631914099,1.626998696,1.711878755,,,,,,
-bootstrap,252,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.300447442,0.299049351,2.12559231,2.119710298,1.106707334,,,,,,
-bootstrap,252,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.489557346,0.487020836,2.168973045,2.162056641,1.862666939,,,,,,
-bootstrap,252,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.484696902,0.482191098,2.163631692,2.156753533,1.847901631,,,,,,
-bootstrap,252,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.485263767,0.482754243,2.163902479,2.157020745,1.846831602,,,,,,
-bootstrap,252,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.373043141,0.371268736,2.603020624,2.595573435,1.131873001,,,,,,
-bootstrap,252,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.373076499,0.3713019,2.603057724,2.59561024,1.131879585,,,,,,
-bootstrap,252,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.350913307,0.349258744,2.560065358,2.552844085,1.067119964,,,,,,
-multivar_norm,126,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.3512591,0.153537473,2.135436675,1.310795819,1.374874145,,,,,,
-multivar_norm,126,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.294244691,0.133746039,2.704566532,1.721216993,0.859570408,,,,,,
-multivar_norm,126,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.373832889,0.157887,1.788874724,1.064473942,1.759577883,,,,,,
-multivar_norm,126,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.311681312,0.13938101,2.232204781,1.396333926,1.14003989,,,,,,
-multivar_norm,126,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.533442835,0.218143325,2.366463416,1.378998789,1.954913474,,,,,,
-multivar_norm,126,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.527745262,0.216176592,2.35898825,1.3766938,1.939273678,,,,,,
-multivar_norm,126,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.528735376,0.216484339,2.360433364,1.377176672,1.940285876,,,,,,
-multivar_norm,126,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.386197723,0.170699596,2.723070277,1.686348948,1.173865527,,,,,,
-multivar_norm,126,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.386231784,0.17071247,2.72310285,1.686352639,1.173965081,,,,,,
-multivar_norm,126,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.362580095,0.161251119,2.673591959,1.665606434,1.112294773,,,,,,
-multivar_norm,189,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.33914618,0.239223374,2.051661128,1.666999299,1.386697724,,,,,,
-multivar_norm,189,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.289206367,0.20716555,2.642040296,2.177027487,0.867312683,,,,,,
-multivar_norm,189,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.354969812,0.247254235,1.691626938,1.359095478,1.773381288,,,,,,
-multivar_norm,189,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.304205027,0.216586424,2.164121179,1.771924191,1.149916327,,,,,,
-multivar_norm,189,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.504791429,0.346116075,2.240772586,1.780324538,1.971137881,,,,,,
-multivar_norm,189,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.499961942,0.342968526,2.235132377,1.776880521,1.954960907,,,,,,
-multivar_norm,189,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.500332178,0.343275022,2.23589678,1.777447033,1.956142676,,,,,,
-multivar_norm,189,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.377495499,0.267060922,2.646014362,2.15411872,1.184126803,,,,,,
-multivar_norm,189,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.37752954,0.267083286,2.646034077,2.154124244,1.18422438,,,,,,
-multivar_norm,189,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.354883262,0.251770141,2.601145083,2.123366971,1.12207136,,,,,,
-multivar_norm,252,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.333426132,0.331831381,2.009612861,2.003833031,1.392632848,,,,,,
-multivar_norm,252,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.287001255,0.285687872,2.61413783,2.607103986,0.871116168,,,,,,
-multivar_norm,252,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.345403721,0.343697115,1.642711259,1.637756645,1.780957344,,,,,,
-multivar_norm,252,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.300485499,0.299086751,2.130043386,2.124138858,1.154847124,,,,,,
-multivar_norm,252,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.490402592,0.487860135,2.178356435,2.171394662,1.979205258,,,,,,
-multivar_norm,252,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.485553057,0.4830417,2.172920401,2.165997847,1.963490924,,,,,,
-multivar_norm,252,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.486148652,0.483633377,2.173710289,2.166782196,1.964196578,,,,,,
-multivar_norm,252,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.373165085,0.37138946,2.607478482,2.60000337,1.189293999,,,,,,
-multivar_norm,252,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.373198086,0.37142227,2.607500388,2.600025029,1.189396972,,,,,,
-multivar_norm,252,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.351020373,0.349364759,2.564662595,2.557414185,1.126830722,,,,,,
-multivar_t,126,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.35313598,0.153726571,2.060669723,1.259628019,1.431683242,,,,,,
-multivar_t,126,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.294706629,0.133728035,2.60112569,1.652185436,0.896230403,,,,,,
-multivar_t,126,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.375264658,0.157731847,1.726779814,1.021622777,1.830306855,,,,,,
-multivar_t,126,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.312725964,0.139458113,2.150733953,1.341226517,1.187808307,,,,,,
-multivar_t,126,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.535828375,0.217879634,2.282963082,1.322979158,2.034854119,,,,,,
-multivar_t,126,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.530222424,0.21589521,2.275296146,1.320553478,2.018342868,,,,,,
-multivar_t,126,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.531021536,0.21623047,2.277332545,1.321495774,2.019209467,,,,,,
-multivar_t,126,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.387371563,0.170778193,2.622451029,1.619521332,1.223575144,,,,,,
-multivar_t,126,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.387407373,0.170791556,2.622479317,1.619521294,1.223682126,,,,,,
-multivar_t,126,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.36363726,0.161326539,2.574349699,1.59951532,1.159382211,,,,,,
-multivar_t,189,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.340067361,0.239522536,1.972871436,1.600628475,1.443794995,,,,,,
-multivar_t,189,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.289643588,0.207345825,2.540065799,2.091486283,0.904227962,,,,,,
-multivar_t,189,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.35530147,0.246945201,1.625320433,1.302877368,1.846001658,,,,,,
-multivar_t,189,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.304372183,0.216484841,2.077806981,1.699303296,1.198400157,,,,,,
-multivar_t,189,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.505419987,0.345749547,2.1533755,1.7072724,2.052291433,,,,,,
-multivar_t,189,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.500165156,0.342335143,2.146238188,1.702677727,2.036165732,,,,,,
-multivar_t,189,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.500552748,0.342783094,2.147807496,1.704085125,2.03689588,,,,,,
-multivar_t,189,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.377656861,0.266925828,2.540051584,2.065734979,1.234897077,,,,,,
-multivar_t,189,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.377689564,0.266947253,2.540073182,2.065742445,1.235005323,,,,,,
-multivar_t,189,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.354997072,0.251631207,2.496670374,2.03611094,1.17006241,,,,,,
-multivar_t,252,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.334149118,0.332544791,1.932230594,1.926636857,1.450314671,,,,,,
-multivar_t,252,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.287010405,0.285694964,2.508904877,2.50213382,0.908170155,,,,,,
-multivar_t,252,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.345615671,0.343897519,1.575751372,1.57095271,1.853875944,,,,,,
-multivar_t,252,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.30028398,0.298882969,2.042782288,2.037094644,1.203478776,,,,,,
-multivar_t,252,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.490755922,0.48819779,2.090775854,2.084036871,2.06107914,,,,,,
-multivar_t,252,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.485644041,0.483119246,2.084901871,2.078204663,2.044587918,,,,,,
-multivar_t,252,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.486361673,0.483831987,2.085934286,2.079230622,2.045472723,,,,,,
-multivar_t,252,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.372985177,0.371206749,2.501049119,2.493851623,1.240087981,,,,,,
-multivar_t,252,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.373017213,0.371238599,2.501067681,2.493869963,1.240192676,,,,,,
-multivar_t,252,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.350817158,0.349159263,2.459677138,2.452699793,1.174967009,,,,,,
-Out of Sample,126,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.432278004,0.194342011,3.231519482,2.035475117,1.011586181,,,,,,
-Out of Sample,126,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.252643647,0.118499616,2.906829331,1.907021205,0.629202765,,,,,,
-Out of Sample,126,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.407659189,0.18346259,2.087858058,1.315063098,1.452668043,,,,,,
-Out of Sample,126,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.261018264,0.12111173,1.519323791,0.984968261,1.164154442,,,,,,
-Out of Sample,126,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.461023042,0.207012484,2.216967186,1.393270826,1.558925593,,,,,,
-Out of Sample,126,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.492720171,0.220100338,2.405362619,1.504222017,1.548054732,,,,,,
-Out of Sample,126,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.451284928,0.202863445,2.234601774,1.406001722,1.516150983,,,,,,
-Out of Sample,126,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.308582612,0.143425092,1.629993524,1.059492474,1.331188302,,,,,,
-Out of Sample,126,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.308650298,0.143454789,1.628965734,1.058827699,1.331538477,,,,,,
-Out of Sample,126,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.237320193,0.111412448,1.414101414,0.927558848,1.187414789,,,,,,
-Out of Sample,189,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.350002793,0.251397156,2.150968939,1.774691404,1.244297812,,,,,,
-Out of Sample,189,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.273069134,0.198083542,2.497052977,2.08026661,0.728854107,,,,,,
-Out of Sample,189,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,random,0.386163615,0.27677922,1.755103153,1.445070433,1.64929832,,,,,,
-Out of Sample,189,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,random,0.317769238,0.229630911,1.64400987,1.364470432,1.299226937,,,,,,
-Out of Sample,189,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,ahc,0.371201986,0.26641774,1.665044843,1.372725102,1.653019317,,,,,,
-Out of Sample,189,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.35709407,0.256626509,1.639640831,1.353493989,1.621349255,,,,,,
-Out of Sample,189,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,kshape,0.316050753,0.227574582,1.422771433,1.176335898,1.62280823,,,,,,
-Out of Sample,189,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,ahc,0.317508235,0.229451203,1.643910064,1.364430164,1.299158136,,,,,,
-Out of Sample,189,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.253505313,0.18425971,1.425311265,1.189409286,1.185107337,,,,,,
-Out of Sample,189,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,kshape,0.254980923,0.184931953,1.355120673,1.128252699,1.200975204,,,,,,
-Out of Sample,252,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.294782812,0.294782812,1.780326628,1.780326628,1.275446355,,,,,,
-Out of Sample,252,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.20256291,0.20256291,1.753171201,1.753171201,0.791178589,,,,,,
-Out of Sample,252,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.399019247,0.399019247,1.786711688,1.786711688,1.730219236,,,,,,
-Out of Sample,252,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.317453017,0.317453017,1.648893653,1.648893653,1.323187911,,,,,,
-Out of Sample,252,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.325522024,0.325522024,1.471845047,1.471845047,1.704438496,,,,,,
-Out of Sample,252,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.384550181,0.384550181,1.767316473,1.767316473,1.66726481,,,,,,
-Out of Sample,252,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.334166594,0.334166594,1.554508178,1.554508178,1.672206184,,,,,,
-Out of Sample,252,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.246379672,0.246379672,1.253759786,1.253759786,1.380907391,,,,,,
-Out of Sample,252,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.246530308,0.246530308,1.253519117,1.253519117,1.381063627,,,,,,
-Out of Sample,252,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.281228683,0.281228683,1.568912292,1.568912292,1.264857337,,,,,,
-Out of Sample,126,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.569016374,0.248033296,3.963668774,2.437139603,1.060574064,,,,,,
-Out of Sample,126,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.395937262,0.180569142,4.410640615,2.816861382,0.655839903,,,,,,
-Out of Sample,126,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.585533249,0.252860697,3.26767512,1.986550116,1.480012259,,,,,,
-Out of Sample,126,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.451981237,0.203640863,3.843450897,2.426348272,0.866874536,,,,,,
-Out of Sample,126,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.573578159,0.248077924,3.183680084,1.938349498,1.489975815,,,,,,
-Out of Sample,126,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.567611592,0.245750675,3.181149483,1.939121547,1.475919798,,,,,,
-Out of Sample,126,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.627385749,0.269296662,3.642193278,2.208518625,1.31179302,,,,,,
-Out of Sample,126,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.451906683,0.203609978,3.84363291,2.426492817,0.866744994,,,,,,
-Out of Sample,126,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.409525919,0.185854095,3.774733194,2.399820104,0.810875808,,,,,,
-Out of Sample,126,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.439960256,0.198339078,3.907764082,2.470113647,0.840369837,,,,,,
-Out of Sample,189,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.414414836,0.294650758,2.275614711,1.863133786,1.323726116,,,,,,
-Out of Sample,189,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.288359228,0.208884374,1.847872973,1.537194585,0.871481848,,,,,,
-Out of Sample,189,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.443675553,0.313317837,2.023312569,1.647422148,1.580347689,,,,,,
-Out of Sample,189,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.294015004,0.212481846,1.493020643,1.238801996,1.032705583,,,,,,
-Out of Sample,189,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.41887264,0.296809928,1.855194329,1.513133431,1.703004194,,,,,,
-Out of Sample,189,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.423973281,0.300354067,1.889569428,1.54086395,1.693980165,,,,,,
-Out of Sample,189,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.412636832,0.292564579,1.840242274,1.501858452,1.690432733,,,,,,
-Out of Sample,189,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.313308152,0.226162381,1.620335356,1.343140464,1.021846768,,,,,,
-Out of Sample,189,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.313444327,0.226255989,1.620805876,1.343503587,1.021943432,,,,,,
-Out of Sample,189,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.284163674,0.205739568,1.50472328,1.250915965,0.994354184,,,,,,
-Out of Sample,252,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.336600041,0.336600041,1.803941739,1.803941739,1.356591509,,,,,,
-Out of Sample,252,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.225510554,0.225510554,1.456306627,1.456306627,0.911909545,,,,,,
-Out of Sample,252,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.411532118,0.411532118,1.870404489,1.870404489,1.623890495,,,,,,
-Out of Sample,252,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.275038523,0.275038523,1.443787483,1.443787483,1.134377227,,,,,,
-Out of Sample,252,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.355687825,0.355687825,1.55197811,1.55197811,1.75009488,,,,,,
-Out of Sample,252,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.376704032,0.376704032,1.660434134,1.660434134,1.731780242,,,,,,
-Out of Sample,252,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.3582083,0.3582083,1.579917816,1.579917816,1.735587019,,,,,,
-Out of Sample,252,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.246505637,0.246505637,1.292252948,1.292252948,1.106627869,,,,,,
-Out of Sample,252,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.246593611,0.246593611,1.292563868,1.292563868,1.106788759,,,,,,
-Out of Sample,252,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.25501892,0.25501892,1.394292399,1.394292399,1.085789362,,,,,,
+Distribution Model for Simulation/Out of Sample,Time Horizon,Portfolio Set,Original Portfolios,Reweighing Method,Cryptos,Clustering method,annualised_return,mean_period_return,sharpe_annualized,sharpe_period,VaR
+bootstrap,126,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.19659589,0.085791504,0.985860793,0.590734887,1.464466524
+bootstrap,126,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.205088785,0.094679018,1.890677426,1.219286752,0.761359765
+bootstrap,126,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.180806647,0.072819172,0.650354363,0.347314471,2.027957071
+bootstrap,126,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.185009587,0.080179764,0.881474562,0.520775043,1.532380588
+bootstrap,126,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.380949649,0.156829859,1.455731835,0.832284631,2.166035597
+bootstrap,126,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.371189845,0.153334205,1.441869515,0.827063904,2.120884634
+bootstrap,126,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.372747527,0.153815989,1.438934991,0.824550308,2.133910247
+bootstrap,126,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.391261132,0.166892083,1.838420185,1.094267115,1.704764287
+bootstrap,126,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.391324069,0.166914699,1.838463029,1.094269945,1.704671403
+bootstrap,126,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.341214194,0.147766307,1.742792369,1.052938568,1.552343578
+bootstrap,189,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.186046373,0.131835906,0.923054213,0.747056163,1.477312922
+bootstrap,189,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.201349496,0.14543055,1.846374655,1.532657964,0.767765896
+bootstrap,189,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.162158834,0.111728964,0.564347539,0.438040893,2.045292445
+bootstrap,189,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.173858655,0.122954345,0.813524055,0.655260374,1.546430291
+bootstrap,189,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.354213386,0.244720222,1.338150175,1.060274155,2.185593183
+bootstrap,189,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.345492181,0.2390453,1.326277616,1.052328949,2.139461303
+bootstrap,189,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.346881415,0.239897817,1.323974999,1.050077581,2.153669299
+bootstrap,189,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.372876072,0.2606794,1.738421431,1.396406685,1.714182075
+bootstrap,189,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.372927578,0.260711811,1.738415546,1.396385715,1.714031543
+bootstrap,189,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.326720149,0.22990044,1.655539971,1.338410829,1.566571486
+bootstrap,252,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.180648576,0.17980599,0.891566555,0.889008973,1.484034449
+bootstrap,252,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.19956277,0.198676296,1.825959959,1.821269861,0.770907693
+bootstrap,252,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.16845841,0.16766936,0.780666713,0.778384557,1.554093824
+bootstrap,252,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.15289892,0.152134969,0.522398903,0.520634619,2.053620795
+bootstrap,252,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.340823594,0.339110505,1.280210049,1.276140739,2.194789493
+bootstrap,252,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.332714622,0.331049176,1.269616603,1.265606001,2.148371342
+bootstrap,252,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.333779638,0.332106912,1.26684135,1.262833106,2.163250714
+bootstrap,252,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.363829228,0.36204933,1.689175056,1.684073414,1.718536526
+bootstrap,252,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.363891744,0.362111465,1.689254857,1.684152679,1.718371714
+bootstrap,252,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.319485213,0.317951976,1.61273133,1.60800974,1.573690863
+multivar_norm,126,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.196541345,0.085736355,1.007645438,0.604046565,1.534983811
+multivar_norm,126,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.204919083,0.094594229,1.905227042,1.227515856,0.8061183
+multivar_norm,126,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.181266306,0.072965052,0.664037127,0.355392239,2.118425581
+multivar_norm,126,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.185218173,0.080268868,0.894903453,0.528969859,1.586527326
+multivar_norm,126,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.381575603,0.157043021,1.463245399,0.835356528,2.275816268
+multivar_norm,126,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.37172859,0.153527497,1.446836278,0.828750363,2.236485359
+multivar_norm,126,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.373424466,0.154054024,1.447308295,0.828190696,2.244550617
+multivar_norm,126,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.39164253,0.167034154,1.847903063,1.098459735,1.819809364
+multivar_norm,126,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.391713169,0.167058963,1.847987933,1.09848062,1.820046962
+multivar_norm,126,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.341622743,0.147901397,1.753357455,1.057855744,1.639057475
+multivar_norm,189,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.185772498,0.131627509,0.936898674,0.758247018,1.547787976
+multivar_norm,189,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.201287391,0.145385225,1.857210489,1.541169784,0.813202049
+multivar_norm,189,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.162539675,0.111983543,0.574416028,0.446160109,2.13559134
+multivar_norm,189,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.17412574,0.123136113,0.823534767,0.663340332,1.599582906
+multivar_norm,189,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.354678269,0.245019325,1.343855856,1.06428317,2.294895369
+multivar_norm,189,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.345974388,0.239360266,1.330305674,1.055049145,2.255144504
+multivar_norm,189,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.347335556,0.240194363,1.330047,1.05442428,2.263201771
+multivar_norm,189,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.373254273,0.26092935,1.745437743,1.401405841,1.835454995
+multivar_norm,189,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.373315682,0.260968897,1.745487462,1.401430656,1.835705484
+multivar_norm,189,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.327062385,0.230133353,1.663485723,1.344297885,1.652934732
+multivar_norm,252,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.180757422,0.179914109,0.903739379,0.901146364,1.554070697
+multivar_norm,252,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.199488675,0.198602401,1.833289996,1.828572766,0.816594218
+multivar_norm,252,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.152858425,0.152094425,0.528428552,0.526646149,2.144338026
+multivar_norm,252,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.168546648,0.167757059,0.788024756,0.785720784,1.606137114
+multivar_norm,252,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.341049696,0.339335042,1.283733233,1.27964554,2.304494883
+multivar_norm,252,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.33283037,0.331164,1.271403786,1.267380896,2.264639785
+multivar_norm,252,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.334127343,0.33245232,1.271008146,1.266979265,2.272725652
+multivar_norm,252,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.364138685,0.36235681,1.694675452,1.689547135,1.843122952
+multivar_norm,252,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.364199852,0.362417603,1.694721231,1.689592491,1.843375717
+multivar_norm,252,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.319827352,0.318292066,1.618769785,1.614021573,1.65975416
+multivar_t,126,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.198209534,0.0858913,0.977353153,0.581272684,1.596054437
+multivar_t,126,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.205397947,0.094637762,1.834463264,1.17925487,0.839722261
+multivar_t,126,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.183144197,0.072719137,0.645409392,0.339396722,2.201812084
+multivar_t,126,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.18637795,0.080151302,0.865872823,0.506850792,1.649778804
+multivar_t,126,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.38424167,0.156745507,1.415096547,0.800020692,2.367581088
+multivar_t,126,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.374305013,0.153247826,1.399094436,0.793715859,2.326706129
+multivar_t,126,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.375921676,0.153729781,1.399412765,0.79307045,2.334829269
+multivar_t,126,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.393522791,0.166882527,1.783527208,1.05357051,1.894309902
+multivar_t,126,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.39358845,0.166904809,1.783579014,1.053570226,1.894567126
+multivar_t,126,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.343043591,0.147749713,1.691041062,1.014377251,1.70601071
+multivar_t,189,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.186291265,0.131682015,0.901858794,0.727765812,1.609607559
+multivar_t,189,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.201407786,0.1453738,1.78360948,1.478879524,0.84699779
+multivar_t,189,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.163030012,0.111746885,0.553290646,0.426854944,2.219842594
+multivar_t,189,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.174479322,0.123048807,0.792306634,0.635947345,1.663528056
+multivar_t,189,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.355305928,0.2446749,1.292008816,1.019606155,2.387298488
+multivar_t,189,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.346509548,0.238989507,1.278751623,1.010649133,2.346027869
+multivar_t,189,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.347955468,0.239866298,1.278823198,1.010254181,2.354259424
+multivar_t,189,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.373757364,0.260757438,1.677279822,1.343679157,1.910744969
+multivar_t,189,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.373818682,0.26079675,1.677339972,1.343712554,1.910993459
+multivar_t,189,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.32741077,0.22995972,1.597992322,1.288719848,1.720912645
+multivar_t,252,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.181185077,0.180334566,0.869277245,0.866752546,1.616153387
+multivar_t,252,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.199670631,0.198781964,1.761570199,1.75702037,0.850583348
+multivar_t,252,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.153572682,0.152795942,0.510214549,0.508454186,2.228772984
+multivar_t,252,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.169023081,0.16822568,0.758806965,0.75655645,1.670054042
+multivar_t,252,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.34188668,0.340154468,1.235091016,1.231104773,2.397452178
+multivar_t,252,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.333693704,0.332010186,1.223431865,1.219508528,2.355936882
+multivar_t,252,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.334970384,0.333278241,1.22294783,1.219019086,2.364300552
+multivar_t,252,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.364699139,0.362905425,1.62876381,1.623789995,1.91844111
+multivar_t,252,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.364754875,0.362960815,1.628801684,1.623827488,1.918696006
+multivar_t,252,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.32025415,0.318709575,1.555618865,1.551016526,1.727706367
+bootstrap,126,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.350640289,0.15332935,2.122885494,1.304349033,1.338812933
+bootstrap,126,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.294298152,0.133782254,2.70514331,1.722754478,0.827638939
+bootstrap,126,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.373231907,0.157764869,1.773728507,1.05690141,1.689068066
+bootstrap,126,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.311935854,0.139519323,2.223888226,1.392437531,1.09180972
+bootstrap,126,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.533636459,0.218018762,2.354372804,1.374074092,1.838895112
+bootstrap,126,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.527898625,0.216058689,2.346886342,1.371783569,1.823950472
+bootstrap,126,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.528523835,0.216291385,2.347387164,1.371859056,1.823350953
+bootstrap,126,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.386421129,0.170821419,2.715091746,1.68335399,1.115665898
+bootstrap,126,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.386457401,0.170835082,2.715137954,1.683364534,1.115683898
+bootstrap,126,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.362816271,0.161379226,2.664937593,1.662093226,1.052474172
+bootstrap,189,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.339673214,0.239573855,2.046089615,1.662823408,1.351911625
+bootstrap,189,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.289431301,0.207325758,2.644120788,2.179174963,0.83527046
+bootstrap,189,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.354988128,0.247260446,1.681494547,1.351378198,1.704296322
+bootstrap,189,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.30407752,0.216504258,2.156408644,1.766157203,1.101635584
+bootstrap,189,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.504725776,0.346057215,2.23270057,1.774767565,1.854831714
+bootstrap,189,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.499548137,0.342778341,2.226541745,1.771067996,1.840061033
+bootstrap,189,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.500215658,0.343200512,2.227151144,1.771394746,1.839080901
+bootstrap,189,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.377330432,0.26695355,2.638822354,2.149098493,1.126378479
+bootstrap,189,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.377359693,0.266972614,2.638802784,2.149072521,1.126398579
+bootstrap,189,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.354730237,0.251669582,2.593221621,2.117689087,1.062384185
+bootstrap,252,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.333440732,0.331845933,2.005650271,1.999888173,1.357285672
+bootstrap,252,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.287115505,0.285801728,2.616441925,2.609409203,0.838890353
+bootstrap,252,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.344805113,0.343101511,1.631914099,1.626998696,1.711878755
+bootstrap,252,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.300447442,0.299049351,2.12559231,2.119710298,1.106707334
+bootstrap,252,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.489557346,0.487020836,2.168973045,2.162056641,1.862666939
+bootstrap,252,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.484696902,0.482191098,2.163631692,2.156753533,1.847901631
+bootstrap,252,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.485263767,0.482754243,2.163902479,2.157020745,1.846831602
+bootstrap,252,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.373043141,0.371268736,2.603020624,2.595573435,1.131873001
+bootstrap,252,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.373076499,0.3713019,2.603057724,2.59561024,1.131879585
+bootstrap,252,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.350913307,0.349258744,2.560065358,2.552844085,1.067119964
+multivar_norm,126,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.3512591,0.153537473,2.135436675,1.310795819,1.374874145
+multivar_norm,126,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.294244691,0.133746039,2.704566532,1.721216993,0.859570408
+multivar_norm,126,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.373832889,0.157887,1.788874724,1.064473942,1.759577883
+multivar_norm,126,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.311681312,0.13938101,2.232204781,1.396333926,1.14003989
+multivar_norm,126,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.533442835,0.218143325,2.366463416,1.378998789,1.954913474
+multivar_norm,126,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.527745262,0.216176592,2.35898825,1.3766938,1.939273678
+multivar_norm,126,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.528735376,0.216484339,2.360433364,1.377176672,1.940285876
+multivar_norm,126,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.386197723,0.170699596,2.723070277,1.686348948,1.173865527
+multivar_norm,126,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.386231784,0.17071247,2.72310285,1.686352639,1.173965081
+multivar_norm,126,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.362580095,0.161251119,2.673591959,1.665606434,1.112294773
+multivar_norm,189,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.33914618,0.239223374,2.051661128,1.666999299,1.386697724
+multivar_norm,189,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.289206367,0.20716555,2.642040296,2.177027487,0.867312683
+multivar_norm,189,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.354969812,0.247254235,1.691626938,1.359095478,1.773381288
+multivar_norm,189,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.304205027,0.216586424,2.164121179,1.771924191,1.149916327
+multivar_norm,189,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.504791429,0.346116075,2.240772586,1.780324538,1.971137881
+multivar_norm,189,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.499961942,0.342968526,2.235132377,1.776880521,1.954960907
+multivar_norm,189,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.500332178,0.343275022,2.23589678,1.777447033,1.956142676
+multivar_norm,189,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.377495499,0.267060922,2.646014362,2.15411872,1.184126803
+multivar_norm,189,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.37752954,0.267083286,2.646034077,2.154124244,1.18422438
+multivar_norm,189,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.354883262,0.251770141,2.601145083,2.123366971,1.12207136
+multivar_norm,252,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.333426132,0.331831381,2.009612861,2.003833031,1.392632848
+multivar_norm,252,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.287001255,0.285687872,2.61413783,2.607103986,0.871116168
+multivar_norm,252,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.345403721,0.343697115,1.642711259,1.637756645,1.780957344
+multivar_norm,252,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.300485499,0.299086751,2.130043386,2.124138858,1.154847124
+multivar_norm,252,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.490402592,0.487860135,2.178356435,2.171394662,1.979205258
+multivar_norm,252,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.485553057,0.4830417,2.172920401,2.165997847,1.963490924
+multivar_norm,252,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.486148652,0.483633377,2.173710289,2.166782196,1.964196578
+multivar_norm,252,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.373165085,0.37138946,2.607478482,2.60000337,1.189293999
+multivar_norm,252,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.373198086,0.37142227,2.607500388,2.600025029,1.189396972
+multivar_norm,252,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.351020373,0.349364759,2.564662595,2.557414185,1.126830722
+multivar_t,126,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.35313598,0.153726571,2.060669723,1.259628019,1.431683242
+multivar_t,126,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.294706629,0.133728035,2.60112569,1.652185436,0.896230403
+multivar_t,126,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.375264658,0.157731847,1.726779814,1.021622777,1.830306855
+multivar_t,126,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.312725964,0.139458113,2.150733953,1.341226517,1.187808307
+multivar_t,126,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.535828375,0.217879634,2.282963082,1.322979158,2.034854119
+multivar_t,126,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.530222424,0.21589521,2.275296146,1.320553478,2.018342868
+multivar_t,126,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.531021536,0.21623047,2.277332545,1.321495774,2.019209467
+multivar_t,126,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.387371563,0.170778193,2.622451029,1.619521332,1.223575144
+multivar_t,126,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.387407373,0.170791556,2.622479317,1.619521294,1.223682126
+multivar_t,126,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.36363726,0.161326539,2.574349699,1.59951532,1.159382211
+multivar_t,189,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.340067361,0.239522536,1.972871436,1.600628475,1.443794995
+multivar_t,189,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.289643588,0.207345825,2.540065799,2.091486283,0.904227962
+multivar_t,189,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.35530147,0.246945201,1.625320433,1.302877368,1.846001658
+multivar_t,189,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.304372183,0.216484841,2.077806981,1.699303296,1.198400157
+multivar_t,189,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.505419987,0.345749547,2.1533755,1.7072724,2.052291433
+multivar_t,189,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.500165156,0.342335143,2.146238188,1.702677727,2.036165732
+multivar_t,189,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.500552748,0.342783094,2.147807496,1.704085125,2.03689588
+multivar_t,189,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.377656861,0.266925828,2.540051584,2.065734979,1.234897077
+multivar_t,189,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.377689564,0.266947253,2.540073182,2.065742445,1.235005323
+multivar_t,189,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.354997072,0.251631207,2.496670374,2.03611094,1.17006241
+multivar_t,252,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.334149118,0.332544791,1.932230594,1.926636857,1.450314671
+multivar_t,252,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.287010405,0.285694964,2.508904877,2.50213382,0.908170155
+multivar_t,252,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.345615671,0.343897519,1.575751372,1.57095271,1.853875944
+multivar_t,252,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.30028398,0.298882969,2.042782288,2.037094644,1.203478776
+multivar_t,252,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.490755922,0.48819779,2.090775854,2.084036871,2.06107914
+multivar_t,252,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.485644041,0.483119246,2.084901871,2.078204663,2.044587918
+multivar_t,252,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.486361673,0.483831987,2.085934286,2.079230622,2.045472723
+multivar_t,252,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.372985177,0.371206749,2.501049119,2.493851623,1.240087981
+multivar_t,252,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.373017213,0.371238599,2.501067681,2.493869963,1.240192676
+multivar_t,252,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.350817158,0.349159263,2.459677138,2.452699793,1.174967009
+Out of Sample,126,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.432278004,0.194342011,3.231519482,2.035475117,1.011586181
+Out of Sample,126,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.252643647,0.118499616,2.906829331,1.907021205,0.629202765
+Out of Sample,126,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.407659189,0.18346259,2.087858058,1.315063098,1.452668043
+Out of Sample,126,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.261018264,0.12111173,1.519323791,0.984968261,1.164154442
+Out of Sample,126,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.461023042,0.207012484,2.216967186,1.393270826,1.558925593
+Out of Sample,126,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.492720171,0.220100338,2.405362619,1.504222017,1.548054732
+Out of Sample,126,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.451284928,0.202863445,2.234601774,1.406001722,1.516150983
+Out of Sample,126,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.308582612,0.143425092,1.629993524,1.059492474,1.331188302
+Out of Sample,126,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.308650298,0.143454789,1.628965734,1.058827699,1.331538477
+Out of Sample,126,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.237320193,0.111412448,1.414101414,0.927558848,1.187414789
+Out of Sample,189,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.350002793,0.251397156,2.150968939,1.774691404,1.244297812
+Out of Sample,189,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.273069134,0.198083542,2.497052977,2.08026661,0.728854107
+Out of Sample,189,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,random,0.386163615,0.27677922,1.755103153,1.445070433,1.64929832
+Out of Sample,189,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,random,0.317769238,0.229630911,1.64400987,1.364470432,1.299226937
+Out of Sample,189,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,ahc,0.371201986,0.26641774,1.665044843,1.372725102,1.653019317
+Out of Sample,189,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.35709407,0.256626509,1.639640831,1.353493989,1.621349255
+Out of Sample,189,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,kshape,0.316050753,0.227574582,1.422771433,1.176335898,1.62280823
+Out of Sample,189,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,ahc,0.317508235,0.229451203,1.643910064,1.364430164,1.299158136
+Out of Sample,189,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.253505313,0.18425971,1.425311265,1.189409286,1.185107337
+Out of Sample,189,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,kshape,0.254980923,0.184931953,1.355120673,1.128252699,1.200975204
+Out of Sample,252,rand_ports_equalw,Random Portfolios,equalw,Normal,No,0.294782812,0.294782812,1.780326628,1.780326628,1.275446355
+Out of Sample,252,minvar_ports_equalw,Minimum Variance,equalw,Normal,No,0.20256291,0.20256291,1.753171201,1.753171201,0.791178589
+Out of Sample,252,random_w_cryptos_random_equalw,Random Portfolios,equalw,Cryptos,random,0.399019247,0.399019247,1.786711688,1.786711688,1.730219236
+Out of Sample,252,minvar_w_cryptos_random_equalw,Minimum Variance,equalw,Cryptos,random,0.317453017,0.317453017,1.648893653,1.648893653,1.323187911
+Out of Sample,252,random_w_cryptos_kmeans_equalw,Random Portfolios,equalw,Cryptos,kmeans,0.325522024,0.325522024,1.471845047,1.471845047,1.704438496
+Out of Sample,252,random_w_cryptos_kshape_equalw,Random Portfolios,equalw,Cryptos,kshape,0.384550181,0.384550181,1.767316473,1.767316473,1.66726481
+Out of Sample,252,random_w_cryptos_ahc_equalw,Random Portfolios,equalw,Cryptos,ahc,0.334166594,0.334166594,1.554508178,1.554508178,1.672206184
+Out of Sample,252,minvar_w_cryptos_kmeans_equalw,Minimum Variance,equalw,Cryptos,kmeans,0.246379672,0.246379672,1.253759786,1.253759786,1.380907391
+Out of Sample,252,minvar_w_cryptos_kshape_equalw,Minimum Variance,equalw,Cryptos,kshape,0.246530308,0.246530308,1.253519117,1.253519117,1.381063627
+Out of Sample,252,minvar_w_cryptos_ahc_equalw,Minimum Variance,equalw,Cryptos,ahc,0.281228683,0.281228683,1.568912292,1.568912292,1.264857337
+Out of Sample,126,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.569016374,0.248033296,3.963668774,2.437139603,1.060574064
+Out of Sample,126,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.395937262,0.180569142,4.410640615,2.816861382,0.655839903
+Out of Sample,126,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.585533249,0.252860697,3.26767512,1.986550116,1.480012259
+Out of Sample,126,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.451981237,0.203640863,3.843450897,2.426348272,0.866874536
+Out of Sample,126,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.573578159,0.248077924,3.183680084,1.938349498,1.489975815
+Out of Sample,126,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.567611592,0.245750675,3.181149483,1.939121547,1.475919798
+Out of Sample,126,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.627385749,0.269296662,3.642193278,2.208518625,1.31179302
+Out of Sample,126,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.451906683,0.203609978,3.84363291,2.426492817,0.866744994
+Out of Sample,126,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.409525919,0.185854095,3.774733194,2.399820104,0.810875808
+Out of Sample,126,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.439960256,0.198339078,3.907764082,2.470113647,0.840369837
+Out of Sample,189,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.414414836,0.294650758,2.275614711,1.863133786,1.323726116
+Out of Sample,189,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.288359228,0.208884374,1.847872973,1.537194585,0.871481848
+Out of Sample,189,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.443675553,0.313317837,2.023312569,1.647422148,1.580347689
+Out of Sample,189,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.294015004,0.212481846,1.493020643,1.238801996,1.032705583
+Out of Sample,189,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.41887264,0.296809928,1.855194329,1.513133431,1.703004194
+Out of Sample,189,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.423973281,0.300354067,1.889569428,1.54086395,1.693980165
+Out of Sample,189,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.412636832,0.292564579,1.840242274,1.501858452,1.690432733
+Out of Sample,189,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.313308152,0.226162381,1.620335356,1.343140464,1.021846768
+Out of Sample,189,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.313444327,0.226255989,1.620805876,1.343503587,1.021943432
+Out of Sample,189,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.284163674,0.205739568,1.50472328,1.250915965,0.994354184
+Out of Sample,252,rand_ports_maxsharpe,Random Portfolios,maxsharpe,Normal,No,0.336600041,0.336600041,1.803941739,1.803941739,1.356591509
+Out of Sample,252,minvar_ports_maxsharpe,Minimum Variance,maxsharpe,Normal,No,0.225510554,0.225510554,1.456306627,1.456306627,0.911909545
+Out of Sample,252,random_w_cryptos_random_maxsharpe,Random Portfolios,maxsharpe,Cryptos,random,0.411532118,0.411532118,1.870404489,1.870404489,1.623890495
+Out of Sample,252,minvar_w_cryptos_random_maxsharpe,Minimum Variance,maxsharpe,Cryptos,random,0.275038523,0.275038523,1.443787483,1.443787483,1.134377227
+Out of Sample,252,random_w_cryptos_kmeans_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kmeans,0.355687825,0.355687825,1.55197811,1.55197811,1.75009488
+Out of Sample,252,random_w_cryptos_kshape_maxsharpe,Random Portfolios,maxsharpe,Cryptos,kshape,0.376704032,0.376704032,1.660434134,1.660434134,1.731780242
+Out of Sample,252,random_w_cryptos_ahc_maxsharpe,Random Portfolios,maxsharpe,Cryptos,ahc,0.3582083,0.3582083,1.579917816,1.579917816,1.735587019
+Out of Sample,252,minvar_w_cryptos_kmeans_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kmeans,0.246505637,0.246505637,1.292252948,1.292252948,1.106627869
+Out of Sample,252,minvar_w_cryptos_kshape_maxsharpe,Minimum Variance,maxsharpe,Cryptos,kshape,0.246593611,0.246593611,1.292563868,1.292563868,1.106788759
+Out of Sample,252,minvar_w_cryptos_ahc_maxsharpe,Minimum Variance,maxsharpe,Cryptos,ahc,0.25501892,0.25501892,1.394292399,1.394292399,1.085789362
