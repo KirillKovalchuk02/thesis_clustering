@@ -22,7 +22,7 @@ from functions import sharpe_ratio_calculation
 #CLAUDE's algorithm for selecting complementing cryptos:
 #After this we want to reoptimize the whole portfolio for max sharpe or min var
 
-def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_assignments, df_prices, n_cryptos=3, verbose=False, rf_rate=0.02):
+def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_assignments, df_prices, n_cryptos=3, verbose=False, rf_rate=0.02, selection_metric='sharpe'):
     """
     Select cryptocurrencies to complement an existing stock portfolio based on
     cluster diversification, with a special case for when all cryptos are in the same cluster.
@@ -31,32 +31,59 @@ def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_ass
     - existing_stocks: List of stock tickers in the current portfolio
     - crypto_candidates: List of potential crypto assets to choose from
     - cluster_assignments: Dictionary mapping each asset to its cluster ID
-    - returns_data: Dictionary mapping each asset to its return metric
+    - df_prices: DataFrame with price data for metric calculations
     - n_cryptos: Number of cryptocurrencies to select (default: 3)
+    - verbose: Whether to print cluster distribution info
+    - rf_rate: Risk-free rate for Sharpe ratio calculation
+    - selection_metric: 'sharpe' for Sharpe ratio or 'return' for raw returns
     
     Returns:
-    - List of selected crypto assets
+    - Tuple: (selected_cryptos, full_new_portfolio)
     """
     if verbose:
         clusters_dict = {i: cluster_assignments[i] for i in existing_stocks}
         print('Cluster Distribution in the original portfolio: \n')
         print(pd.DataFrame(columns = ['ticker', 'cluster'], data=clusters_dict.items()).groupby('cluster').count())
 
-    returns_data = dict(sharpe_ratio_calculation(df_prices, rf_rate_annual = rf_rate))
+    # Calculate metrics based on selection_metric parameter
+    if selection_metric == 'sharpe':
+        returns_data = dict(sharpe_ratio_calculation(df_prices, rf_rate_annual=rf_rate))
+        metric_name = "Sharpe ratio"
+    elif selection_metric == 'return':
+        # Calculate annualized returns
+        returns_data = {}
+        daily_returns = df_prices.pct_change().dropna()
+        for asset in crypto_candidates + existing_stocks:
+            if asset in daily_returns.columns:
+                annual_return = daily_returns[asset].mean() * 252  # Annualize daily returns
+                returns_data[asset] = annual_return
+            else:
+                returns_data[asset] = 0  # Default value if asset not found
+        metric_name = "annualized return"
+    else:
+        raise ValueError("selection_metric must be either 'sharpe' or 'return'")
+    
+    if verbose:
+        print(f"Selection will be based on {metric_name}")
+    
     # Step 1: Identify clusters already represented in the portfolio
     stock_clusters = set(cluster_assignments[stock] for stock in existing_stocks)
     
     # Step 2: Check crypto cluster diversity
     crypto_clusters = set(cluster_assignments[crypto] for crypto in crypto_candidates)
     
-    # Special case: All cryptos are in the same cluster
+    # Special case: All cryptos are in the same cluster - select by highest metric values
     if len(crypto_clusters) == 1:
-        sorted_by_return = sorted(
+        if verbose:
+            print(f"All cryptos in same cluster - selecting top {n_cryptos} by {metric_name}")
+        
+        sorted_by_metric = sorted(
             crypto_candidates,
             key=lambda crypto: returns_data[crypto],
             reverse=True
         )
-        return sorted_by_return[:n_cryptos]
+        selected = sorted_by_metric[:n_cryptos]
+        return selected, existing_stocks + selected
     
     # Step 3: Group crypto candidates by their cluster
     crypto_by_cluster = {}
@@ -66,12 +93,15 @@ def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_ass
             crypto_by_cluster[cluster] = []
         crypto_by_cluster[cluster].append(crypto)
     
-    # Step 4: Select cryptos from unrepresented clusters first
+    # Step 4: Select cryptos from unrepresented clusters first (diversification priority)
     selected_cryptos = []
     unrepresented_clusters = set(crypto_by_cluster.keys()) - stock_clusters
     
-    # Sort unrepresented clusters by the best return in each cluster
-    cluster_best_returns = {
+    if verbose and unrepresented_clusters:
+        print(f"Prioritizing unrepresented clusters: {sorted(unrepresented_clusters)}")
+    
+    # Sort unrepresented clusters by the best metric value in each cluster
+    cluster_best_metrics = {
         cluster: max(returns_data[crypto] for crypto in cryptos)
         for cluster, cryptos in crypto_by_cluster.items()
         if cluster in unrepresented_clusters
@@ -79,23 +109,26 @@ def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_ass
     
     sorted_unrepresented_clusters = sorted(
         unrepresented_clusters, 
-        key=lambda cluster: cluster_best_returns[cluster],
+        key=lambda cluster: cluster_best_metrics[cluster],
         reverse=True
     )
     
-    # For each unrepresented cluster, select the crypto with the best return
+    # For each unrepresented cluster, select the crypto with the best metric value
     for cluster in sorted_unrepresented_clusters:
         if len(selected_cryptos) >= n_cryptos:
             break
             
-        # Choose the crypto with the best return from this cluster
+        # Choose the crypto with the highest metric value from this cluster
         best_crypto = max(
             crypto_by_cluster[cluster],
             key=lambda crypto: returns_data[crypto]
         )
         selected_cryptos.append(best_crypto)
+        
+        if verbose:
+            print(f"Selected {best_crypto} from cluster {cluster} ({metric_name}: {returns_data[best_crypto]:.4f})")
     
-    # Step 5: If we still need more cryptos, use return metrics for selection
+    # Step 5: If we still need more cryptos, select remaining ones by highest metric values
     if len(selected_cryptos) < n_cryptos:
         remaining_cryptos = [
             crypto for crypto in crypto_candidates 
@@ -109,7 +142,14 @@ def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_ass
         )
         
         needed = n_cryptos - len(selected_cryptos)
-        selected_cryptos.extend(sorted_remaining[:needed])
+        additional_selections = sorted_remaining[:needed]
+        selected_cryptos.extend(additional_selections)
+        
+        if verbose and additional_selections:
+            print(f"Added {len(additional_selections)} cryptos by best {metric_name}:")
+            for crypto in additional_selections:
+                cluster = cluster_assignments[crypto]
+                print(f"  {crypto} (cluster {cluster}, {metric_name}: {returns_data[crypto]:.4f})")
         
     full_new_portfolio = existing_stocks + selected_cryptos
     return selected_cryptos, full_new_portfolio
@@ -117,23 +157,135 @@ def select_complementary_cryptos(existing_stocks, crypto_candidates, cluster_ass
 
 
 
-def supplement_set_with_cryptos(portfolio_set:dict, cryptos_list, tickers_with_labels, df_prices, n_cryptos=3, seed=30, random_alloc=False):
+# def supplement_set_with_cryptos(portfolio_set:dict, cryptos_list, tickers_with_labels, df_prices, selection_metric='sharpe', n_cryptos=3, seed=30, random_alloc=False):
+#     """
+#     Loop based function based on "select_complementary_cryptos"
+#     """
+#     random.seed(seed)
+#     new_portfolios_w_cryptos = dict()
+    
+#     for key, portfolio in portfolio_set.items():
+#         if random_alloc:
+#             existing_stocks = list(portfolio.keys())
+#             indices = random.sample(range(len(cryptos_list)), n_cryptos)
+#             cryptos = [cryptos_list[i] for i in indices]
+#             crypto_supplemented_port = existing_stocks + cryptos
+#         else:
+#             existing_stocks = list(portfolio.keys())
+#             cryptos, crypto_supplemented_port = select_complementary_cryptos(existing_stocks=existing_stocks, crypto_candidates=cryptos_list, cluster_assignments=tickers_with_labels, 
+#                                                                               df_prices = df_prices, n_cryptos=n_cryptos, verbose=False, selection_metric=selection_metric)
+        
+#         new_portfolios_w_cryptos[key] = crypto_supplemented_port
+
+#     return new_portfolios_w_cryptos
+
+
+
+
+def select_cryptos_by_correlation(existing_stocks, crypto_candidates, df_prices, n_cryptos=3, selection_metric='sharpe', rf_rate=0.04):
     """
-    Loop based function based on "select_complementary_cryptos"
+    Select cryptocurrencies based on correlation with existing portfolio.
+    Selects cryptos with lowest correlation to maximize diversification.
+    """
+    # Calculate returns for correlation analysis
+    returns = df_prices.pct_change().dropna()
+    
+    # Calculate selection metric (Sharpe or return)
+    if selection_metric == 'sharpe':
+        metric_data = dict(sharpe_ratio_calculation(df_prices, rf_rate_annual=rf_rate))
+    else:
+        daily_returns = df_prices.pct_change().dropna()
+        metric_data = {asset: daily_returns[asset].mean() * 252 for asset in crypto_candidates}
+    
+    # Calculate average correlation of each crypto with existing stocks
+    crypto_correlations = {}
+    
+    for crypto in crypto_candidates:
+        if crypto in returns.columns:
+            correlations_with_stocks = []
+            
+            for stock in existing_stocks:
+                if stock in returns.columns:
+                    corr = returns[crypto].corr(returns[stock])
+                    if not pd.isna(corr):
+                        correlations_with_stocks.append(abs(corr))  # Use absolute correlation
+            
+            # Average absolute correlation with existing portfolio
+            avg_correlation = np.mean(correlations_with_stocks) if correlations_with_stocks else 1.0
+            crypto_correlations[crypto] = avg_correlation
+        else:
+            crypto_correlations[crypto] = 1.0  # High correlation if data missing
+    
+    # Sort cryptos by correlation (ascending - want lowest correlation)
+    # Then by metric (descending - want best performance) as tiebreaker
+    sorted_cryptos = sorted(
+        crypto_candidates,
+        key=lambda crypto: (crypto_correlations[crypto], -metric_data[crypto])
+    )
+    
+    selected_cryptos = sorted_cryptos[:n_cryptos]
+    
+    return selected_cryptos, existing_stocks + selected_cryptos
+
+
+def supplement_set_with_cryptos(portfolio_set: dict, cryptos_list, tickers_with_labels, df_prices, 
+                               selection_method='clustering', selection_metric='sharpe', 
+                               n_cryptos=3, seed=30, rf_rate=0.04):
+    """
+    Loop based function to supplement portfolios with cryptocurrencies using various selection methods.
+    
+    Parameters:
+    - portfolio_set: Dictionary of portfolios to supplement
+    - cryptos_list: List of available cryptocurrencies
+    - tickers_with_labels: Cluster assignments (only used for clustering method)
+    - df_prices: Price data DataFrame
+    - selection_method: 'random', 'clustering', or 'correlation'
+    - selection_metric: 'sharpe' or 'return' (for performance-based selection)
+    - n_cryptos: Number of cryptos to add
+    - seed: Random seed for reproducibility
+    - rf_rate: Risk-free rate for Sharpe calculation
+    
+    Returns:
+    - Dictionary of portfolios supplemented with cryptocurrencies
     """
     random.seed(seed)
     new_portfolios_w_cryptos = dict()
     
     for key, portfolio in portfolio_set.items():
-        if random_alloc:
-            existing_stocks = list(portfolio.keys())
+        existing_stocks = list(portfolio.keys())
+        
+        if selection_method == 'random':
+            # Random selection
             indices = random.sample(range(len(cryptos_list)), n_cryptos)
             cryptos = [cryptos_list[i] for i in indices]
             crypto_supplemented_port = existing_stocks + cryptos
+            
+        elif selection_method == 'clustering':
+            # Clustering-based selection (your original method)
+            cryptos, crypto_supplemented_port = select_complementary_cryptos(
+                existing_stocks=existing_stocks, 
+                crypto_candidates=cryptos_list, 
+                cluster_assignments=tickers_with_labels, 
+                df_prices=df_prices, 
+                n_cryptos=n_cryptos, 
+                verbose=False, 
+                selection_metric=selection_metric,
+                rf_rate=rf_rate
+            )
+            
+        elif selection_method == 'correlation':
+            # Correlation-based selection (new benchmark method)
+            cryptos, crypto_supplemented_port = select_cryptos_by_correlation(
+                existing_stocks=existing_stocks,
+                crypto_candidates=cryptos_list,
+                df_prices=df_prices,
+                n_cryptos=n_cryptos,
+                selection_metric=selection_metric,
+                rf_rate=rf_rate
+            )
+            
         else:
-            existing_stocks = list(portfolio.keys())
-            cryptos, crypto_supplemented_port = select_complementary_cryptos(existing_stocks=existing_stocks, crypto_candidates=cryptos_list, cluster_assignments=tickers_with_labels, 
-                                                                              df_prices = df_prices, n_cryptos=n_cryptos, verbose=False)
+            raise ValueError(f"Unknown selection_method: {selection_method}. Use 'random', 'clustering', or 'correlation'")
         
         new_portfolios_w_cryptos[key] = crypto_supplemented_port
 
@@ -302,32 +454,21 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
         simulations_results_dict[i] = portfolio_sims
 
 
-
-
         #CALCULATE STATISTICS PER PORTFOLIO:
         daily_returns = (portfolio_sims[1:, :] - portfolio_sims[:-1, :]) / portfolio_sims[:-1, :] #DO WE WANT TO ADD FIRST ROW OF 100 VALUES SO THAT WE HAVE A FULL THING?
-        #average cumulative return 
         cumulative_returns_per_simulation = calculate_cumulative_returns(daily_returns)
-        #mean_cumulative_return_for_portfolio = np.mean(cumulative_returns_per_simulation)
-        #average daily return
         mean_daily_return_for_portfolio = np.mean(daily_returns)
         #STD
         std_daily_return = np.std(daily_returns) #return variability per day
 
-        #annualised_return = (1 + mean_cumulative_return_for_portfolio)**(252/t) - 1
-        #annualised_volatility = std_cumulative_return * np.sqrt(252/t)
 
-
-
-
-        final_portfolio_values = portfolio_sims[-1, :]  # Final values across all simulations
-        initial_value = 100  # Your initial portfolio value
-        holding_period_years = t / 252  # Convert days to years
+        final_portfolio_values = portfolio_sims[-1, :]  
+        initial_value = 100  
+        holding_period_years = t / 252
 
         # Calculate annualized returns 
         return_for_period = (final_portfolio_values - initial_value) / initial_value
         annualised_return = (final_portfolio_values / initial_value) ** (1 / holding_period_years) - 1
-        #annualised_return = (1 + return_for_period) ** (1/holding_period_years) - 1
         mean_return = np.mean(return_for_period)
         mean_annual_return = np.mean(annualised_return)
 
@@ -336,11 +477,10 @@ def simulate_evaluate_portfolio_subset(portfolios_subset:dict, return_df, n_sims
 
         #sharpe ratio
         rf_daily = rf_annual / 252
-        #rf_cumulative = (1 + rf_annual) ** (daily_returns.shape[0] / 252) - 1
+
         sharpe_daily = (mean_daily_return_for_portfolio - rf_daily) / std_daily_return
-        #sharpe_cumulative = (mean_cumulative_return_for_portfolio - rf_cumulative)  / std_cumulative_return
         sharpe_annual = sharpe_daily * np.sqrt(252)
-        #sharpe_cumulative_annual = sharpe_cumulative * np.sqrt(252)
+
 
         #Sortino ratio
         # downside_returns = np.minimum(0, daily_returns - rf_daily)
