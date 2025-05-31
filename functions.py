@@ -181,41 +181,6 @@ def join_stocks_crypto(crypto_df, stocks_df, mode = 'crypto_left'): #joins the f
 def log(msg):
     print(f"[{datetime.now().strftime('%H:%M:%S')}] {msg}")
 
-
-# def optimize_portfolio(mu, S, top_five:dict, min_weight_for_top_five=0.01):
-#     """ runs the portfolio optimization with the min variance as an objective 
-    
-#     parameters:
-#     -----------
-#         mu: Expected returns
-#         S: Covariance Matrix
-#         top_five: dict with the preselected stocks that must be included in the optimizaed portfolio 
-#                     (their weights must be at least X% of the portfolio)
-#         min_weight_for_top_five: minimum weight that top five preselected stocks must have
-#     returns:
-#     --------
-#        dictionary of tickers for keys and weights for values
-#     """
-
-#     #log('calculating frontier')
-#     ef = EfficientFrontier(mu, S, solver=cp.CPLEX, weight_bounds=(0,1))
-
-#     for ticker in top_five.keys():
-#         ef.add_constraint(lambda w: w[ef.tickers.index(ticker)] >= min_weight_for_top_five)
-
-#     booleans = cp.Variable(len(ef.tickers), boolean=True)
-#     ef.add_constraint(lambda x: x <= booleans)
-#     ef.add_constraint(lambda x: cp.sum(booleans) == 15)
-
-#     #log('finding min_volatility')
-#     weights = ef.min_volatility()
-    
-#     selected = {ticker: weights[ticker] for ticker in ef.tickers if weights[ticker] >= 0.01}
-
-#     return selected
-
-
-################NEW VERSION WITH CLUSTERS: ######################
 def optimize_portfolio(mu, S, top_five:dict, clusters:dict=None, min_weight_for_top_five=0.01, verbose=False, min_stocks_per_cluster=2):
     """
     Optimizes a portfolio with the following constraints:
@@ -538,13 +503,8 @@ def _calculate_metrics_new(df_smooth, labels, tickers_with_labels, distance_matr
     # Entropy (base 2)
     cluster_entropy = entropy(proportions, base=2)
 
-    # Normalize entropy (0 to 1)
-    #max_entropy = np.log2(len(cluster_counts))
-    #normalized_entropy = cluster_entropy / max_entropy if max_entropy > 0 else 0
-
     balance_metrics = {
         'entropy': round(cluster_entropy, 4),
-        #'normalized_entropy': round(normalized_entropy, 4)
     }
 
     return sil_score, balance_metrics
