@@ -24,7 +24,9 @@ from tslearn.clustering import KShape
 from sklearn.metrics.pairwise import pairwise_distances
 
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_score, adjusted_rand_score, normalized_mutual_info_score
+
+from scipy.stats import entropy
 
 import subprocess
 import warnings
@@ -299,17 +301,7 @@ def run_min_variance(df_price, top_five:dict, risk_model='sample_cov', min_weigh
 
 
 def distance_matrix_calc(df, return_mode='arithmetic', method='kmeans'):
-    """ calculates the DTW matrix for the 
-    
-    parameters:
-    -----------
-        df: dataframe with the stock prices
-    returns:
-    --------
-        DTW matrix in a dataframe format
-    """
     tickers = df.columns
-
 
     if return_mode == 'arithmetic':
         df_returns = df.pct_change().dropna()
@@ -339,11 +331,11 @@ def distance_matrix_calc(df, return_mode='arithmetic', method='kmeans'):
         distance_matrix_df.index = tickers
 
     
-    return distance_matrix_df#, distance_matrix
+    return distance_matrix_df
 
 
 
-def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', return_mode='arithmetic', n_init=1): 
+def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', return_mode='geometric', n_init=3): 
     """ runs the clustering for one of the 3 possible models
     
     parameters:
@@ -391,6 +383,7 @@ def run_clustering_model(df, n_clus=3, model_name='kmeans', linkage='single', re
         cluster_centers = model.cluster_centers_
     except:
         cluster_centers = None
+
     return labels, tickers_with_labels, inertia, cluster_centers
 
 
@@ -440,7 +433,7 @@ def test_clustering_metrics(df_dict, n_clusters_list, method='kmeans', linkage_l
     for linkage in linkage_list:
         for n in n_clusters_list:
             # Get clustering results
-            labels, tickers_with_labels, _, _ = run_clustering_model(
+            labels, tickers_with_labels, inertia, _ = run_clustering_model(
                 df_smooth, n_clus=n, model_name=method, linkage=linkage, 
                 return_mode=return_mode, n_init=n_init
             )
@@ -456,36 +449,12 @@ def test_clustering_metrics(df_dict, n_clusters_list, method='kmeans', linkage_l
                 'return_mode': return_mode,
                 'window_size': window,
                 'df_mode': df_name,
+                'inertia': inertia,
                 **balance_metrics
             })
     
     return pd.DataFrame(results)
 
-
-def _calculate_metrics(df_smooth, labels, tickers_with_labels, distance_matrix_df):
-    """Helper function to calculate both metrics for a given clustering result"""
-    # Calculate silhouette score
-    sil_score = silhouette_score(distance_matrix_df, labels, metric='precomputed')
-    
-    # Calculate balance metrics
-    balance_df = pd.DataFrame(list(tickers_with_labels.items()), columns=['ticker', 'label'])
-    cluster_counts = balance_df.groupby('label').count()
-    
-    max_percentage_per_cluster = (cluster_counts['ticker'] / len(df_smooth.columns)).max()
-    min_percentage_per_cluster = (cluster_counts['ticker'] / len(df_smooth.columns)).min()
-    min_max_delta = round(max_percentage_per_cluster - min_percentage_per_cluster, 4)
-    
-    balance_metrics = {
-        'min_per_cluster': round(min_percentage_per_cluster, 4),
-        'max_per_cluster': round(max_percentage_per_cluster, 4),
-        'min_max_delta': min_max_delta
-    }
-    
-    return sil_score, balance_metrics
-
-
-
-from scipy.stats import entropy
 
 def _calculate_metrics_new(df_smooth, labels, tickers_with_labels, distance_matrix_df):
     """Helper function to calculate both metrics for a given clustering result"""
@@ -497,10 +466,10 @@ def _calculate_metrics_new(df_smooth, labels, tickers_with_labels, distance_matr
     balance_df = pd.DataFrame(list(tickers_with_labels.items()), columns=['ticker', 'label'])
     cluster_counts = balance_df['label'].value_counts().sort_index()
     
-    # Convert to proportions
+    #Convert to proportions
     proportions = cluster_counts / cluster_counts.sum()
 
-    # Entropy (base 2)
+    #Entropy
     cluster_entropy = entropy(proportions, base=2)
 
     balance_metrics = {
@@ -508,3 +477,103 @@ def _calculate_metrics_new(df_smooth, labels, tickers_with_labels, distance_matr
     }
 
     return sil_score, balance_metrics
+
+
+
+
+def evaluate_clustering_stability(df, 
+                                  n_clusters,
+                                   method='kmeans', 
+                                   return_mode='geometric', 
+                                   window_size=252,     # e.g. 1 year of daily data
+                                   step_size=63,        # e.g. ~1 quarter
+                                   linkage='average',
+                                   n_init=3,
+                                   agg_level=1,          # 1 = daily, 3 = every 3 days, 5 = weekly
+                                   smoothing_window=None):  # e.g. 3-day moving average
+    """
+    Evaluates clustering stability over time using rolling windows,
+    applying aggregation and optional smoothing within each window.
+
+    Parameters:
+    -----------
+    df : DataFrame
+        Time series data (rows = time, columns = tickers)
+    agg_level : int
+        Aggregation step size (1 = daily, 3 = every 3rd day, 5 = weekly, etc.)
+    smoothing_window : int or None
+        If set, applies a rolling mean of this window size (in aggregated points)
+    """
+    
+    label_dicts = []
+    time_indices = []
+
+    # Adjust effective window and step sizes after aggregation
+    effective_window = window_size
+    effective_step = step_size
+
+    for start in range(0, len(df) - effective_window + 1, effective_step):
+        df_window = df.iloc[start:start + effective_window]
+        time_indices.append(df.index[start])
+        
+        # Apply aggregation
+        # df_agg = df_window.iloc[::agg_level].copy()
+        if agg_level == 3:
+            df_agg = df_window.resample('3D').last() #try aggregating on a weekly level
+        elif agg_level == 5:
+            df_agg = df_window.resample('W').last()
+        elif agg_level == 1:
+            df_agg = df_window.copy()
+        else:
+            raise ValueError("This aggregation level is not available")
+
+        # Apply smoothing if specified
+        if smoothing_window is not None:
+            df_agg = df_agg.rolling(window=smoothing_window, min_periods=1).mean().dropna()
+
+        if df_agg.shape[0] < 40: 
+            print('The data is way too aggregated to make sense')
+            return None
+        try:
+            # print((df <= 0).sum().sum())
+            # if (df <= 0).sum().sum() > 0:
+            #     return df_agg
+            _, ticker_label_map, _, _ = run_clustering_model(
+                df_agg,
+                n_clus=n_clusters,
+                model_name=method,
+                linkage=linkage,
+                return_mode=return_mode,
+                n_init=n_init
+            )
+            label_dicts.append(ticker_label_map)
+        except Exception as e:
+            print(f"Clustering failed at window starting {df.index[start]}: {e}")
+            label_dicts.append(None)
+    
+    # Compute stability scores between consecutive windows
+    stability_scores = []
+    
+    for i in range(len(label_dicts) - 1):
+        d1, d2 = label_dicts[i], label_dicts[i + 1]
+        if d1 is None or d2 is None:
+            continue
+        
+        common_tickers = list(set(d1) & set(d2))
+        if len(common_tickers) < 5:
+            continue
+        
+        labels1 = [d1[t] for t in common_tickers]
+        labels2 = [d2[t] for t in common_tickers]
+        
+        ari = adjusted_rand_score(labels1, labels2)
+        nmi = normalized_mutual_info_score(labels1, labels2)
+        
+        stability_scores.append({
+            'window_pair': f"{time_indices[i].date()} → {time_indices[i+1].date()}",
+            'ari': ari,
+            'nmi': nmi,
+            'common_tickers': len(common_tickers)
+        })
+
+    return pd.DataFrame(stability_scores)
