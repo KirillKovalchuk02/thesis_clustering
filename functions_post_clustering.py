@@ -259,35 +259,38 @@ def supplement_set_with_cryptos(portfolio_set: dict, cryptos_list, tickers_with_
             indices = random.sample(range(len(cryptos_list)), n_cryptos)
             cryptos = [cryptos_list[i] for i in indices]
             crypto_supplemented_port = existing_stocks + cryptos
+            total_assets = len(crypto_supplemented_port)
+            equal_weight = 1.0 / total_assets
+            portfolio_to_return = {ticker: equal_weight for ticker in crypto_supplemented_port}
+
+        # elif selection_method == 'clustering':
+        #     # Clustering-based selection (your original method)
+        #     cryptos, crypto_supplemented_port = select_complementary_cryptos(
+        #         existing_stocks=existing_stocks, 
+        #         crypto_candidates=cryptos_list, 
+        #         cluster_assignments=tickers_with_labels, 
+        #         df_prices=df_prices, 
+        #         n_cryptos=n_cryptos, 
+        #         verbose=False, 
+        #         selection_metric=selection_metric,
+        #         rf_rate=rf_rate
+        #     )
             
-        elif selection_method == 'clustering':
-            # Clustering-based selection (your original method)
-            cryptos, crypto_supplemented_port = select_complementary_cryptos(
-                existing_stocks=existing_stocks, 
-                crypto_candidates=cryptos_list, 
-                cluster_assignments=tickers_with_labels, 
-                df_prices=df_prices, 
-                n_cryptos=n_cryptos, 
-                verbose=False, 
-                selection_metric=selection_metric,
-                rf_rate=rf_rate
-            )
+        # elif selection_method == 'correlation':
+        #     # Correlation-based selection (new benchmark method)
+        #     cryptos, crypto_supplemented_port = select_cryptos_by_correlation(
+        #         existing_stocks=existing_stocks,
+        #         crypto_candidates=cryptos_list,
+        #         df_prices=df_prices,
+        #         n_cryptos=n_cryptos,
+        #         selection_metric=selection_metric,
+        #         rf_rate=rf_rate
+        #     )
             
-        elif selection_method == 'correlation':
-            # Correlation-based selection (new benchmark method)
-            cryptos, crypto_supplemented_port = select_cryptos_by_correlation(
-                existing_stocks=existing_stocks,
-                crypto_candidates=cryptos_list,
-                df_prices=df_prices,
-                n_cryptos=n_cryptos,
-                selection_metric=selection_metric,
-                rf_rate=rf_rate
-            )
-            
-        else:
-            raise ValueError(f"Unknown selection_method: {selection_method}. Use 'random', 'clustering', or 'correlation'")
+        # else:
+        #     raise ValueError(f"Unknown selection_method: {selection_method}. Use 'random', 'clustering', or 'correlation'")
         
-        new_portfolios_w_cryptos[key] = crypto_supplemented_port
+        new_portfolios_w_cryptos[key] = portfolio_to_return
 
     return new_portfolios_w_cryptos
 

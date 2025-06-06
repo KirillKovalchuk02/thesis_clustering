@@ -128,13 +128,16 @@ def sharpe_ratio_calculation(df, rf_rate_annual = 0.02):
     return sharpe_ratio
 
 
-def generate_rand_portfolios(n_reps:int, n_stocks:int, tickers:list):
+def generate_rand_portfolios(n_reps:int, n_stocks:int, tickers:list, weight_calc='random'):
     random_portfolios = {}
     for i in range(0, n_reps):
         stocks_indices = dict()
         stocks_indices = random.sample(tickers, n_stocks)
-        weights = np.random.random(n_stocks)
-        weights /= np.sum(weights)
+        if weight_calc == 'random':
+            weights = np.random.random(n_stocks)
+            weights /= np.sum(weights)
+        elif weight_calc == 'equal':
+            weights = np.ones(n_stocks) / n_stocks
 
         tickers_w_weights_dict = dict()
         for k, v in zip(stocks_indices, weights):
