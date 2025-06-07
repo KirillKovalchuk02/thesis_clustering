@@ -493,7 +493,8 @@ def evaluate_clustering_stability(df,
                                    linkage='average',
                                    n_init=3,
                                    agg_level=1,          # 1 = daily, 3 = every 3 days, 5 = weekly
-                                   smoothing_window=None):  # e.g. 3-day moving average
+                                   smoothing_window=None,
+                                   crypto_only=False):  # e.g. 3-day moving average
     """
     Evaluates clustering stability over time using rolling windows,
     applying aggregation and optional smoothing within each window.
@@ -534,7 +535,7 @@ def evaluate_clustering_stability(df,
         if smoothing_window is not None:
             df_agg = df_agg.rolling(window=smoothing_window, min_periods=1).mean().dropna()
 
-        if df_agg.shape[0] < 40: 
+        if df_agg.shape[0] < 40 and not crypto_only: 
             print('The data is way too aggregated to make sense')
             return None
         try:
