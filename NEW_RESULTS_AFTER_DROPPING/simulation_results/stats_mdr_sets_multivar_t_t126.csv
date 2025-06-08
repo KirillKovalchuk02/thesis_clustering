@@ -1,0 +1,8 @@
+,126,126,126,126,126
+,stock_only,random_crypto,correlation_crypto,random_subclusters_crypto,correlation_subclusters_crypto
+annualised_return,0.1823821815154421,,,,
+mean_period_return,0.0822586084056156,,,,
+sharpe_annualized,1.1782841588925084,0.0,0.0,0.0,0.0
+sharpe_period,0.7349299610902389,0.0,0.0,0.0,0.0
+VaR,1.1770246759666743,,,,
+diversification_ratio,2.4842541993454796,,,,
