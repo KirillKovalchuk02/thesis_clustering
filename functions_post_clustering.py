@@ -17,6 +17,9 @@ import scikit_posthocs as sp
 
 from functions import sharpe_ratio_calculation
 
+from scipy import stats
+from scipy import optimize
+
 
 
 #CLAUDE's algorithm for selecting complementing cryptos:
@@ -718,9 +721,6 @@ def estimate_t_df_for_portfolio(returns_df):
     """
     Estimate degrees of freedom for each asset, then take the average
     """
-    from scipy import stats
-    import numpy as np
-    from scipy import optimize
     
     asset_dfs = []
     
