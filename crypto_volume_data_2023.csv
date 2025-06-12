@@ -1,0 +1,42 @@
+symbol,coin_id,avg_daily_volume_2023,max_daily_volume_2023,min_daily_volume_2023,data_points,error,cluster
+XRPUSDT,ripple,,,,0,401 Client Error: Unauthorized for url: https://api.coingecko.com/api/v3/coins/ripple/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,0
+XLMUSDT,stellar,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/stellar/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,0
+BCHUSDT,bitcoin-cash,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/bitcoin-cash/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,0
+MKRUSDT,maker,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/maker/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,0
+COMPUSDT,compound-coin,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/compound-coin/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,0
+LPTUSDT,livepeer,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/livepeer/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,0
+DOGEUSDT,dogecoin,,,,0,401 Client Error: Unauthorized for url: https://api.coingecko.com/api/v3/coins/dogecoin/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+SHIBUSDT,shiba-inu,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/shiba-inu/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+LTCUSDT,litecoin,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/litecoin/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+UNIUSDT,uniswap,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/uniswap/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+ETCUSDT,ethereum-classic,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/ethereum-classic/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+ATOMUSDT,cosmos,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/cosmos/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+MATICUSDT,matic-network,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/matic-network/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+EOSUSDT,eos,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/eos/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+QNTUSDT,quant-network,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/quant-network/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+CHZUSDT,chiliz,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/chiliz/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,1
+BTCUSDT,bitcoin,,,,0,401 Client Error: Unauthorized for url: https://api.coingecko.com/api/v3/coins/bitcoin/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+ETHUSDT,ethereum,,,,0,401 Client Error: Unauthorized for url: https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+SOLUSDT,solana,,,,0,401 Client Error: Unauthorized for url: https://api.coingecko.com/api/v3/coins/solana/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+ADAUSDT,cardano,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/cardano/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+LINKUSDT,chainlink,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/chainlink/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+AVAXUSDT,avalanche-2,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/avalanche-2/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+DOTUSDT,polkadot,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/polkadot/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+NEARUSDT,near,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/near/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+ICPUSDT,internet-computer,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/internet-computer/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+AAVEUSDT,aave,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/aave/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+RNDRUSDT,render-token,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/render-token/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+ALGOUSDT,algorand,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/algorand/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+STXUSDT,blockstack,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/blockstack/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+INJUSDT,injective-protocol,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/injective-protocol/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+GRTUSDT,the-graph,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/the-graph/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+XTZUSDT,tezos,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/tezos/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+CRVUSDT,curve-dao-token,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/curve-dao-token/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+SANDUSDT,the-sandbox,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/the-sandbox/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+ZECUSDT,zcash,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/zcash/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+JASMYUSDT,jasmycoin,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/jasmycoin/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+MANAUSDT,decentraland,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/decentraland/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+AXSUSDT,axie-infinity,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/axie-infinity/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+1INCHUSDT,1inch,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/1inch/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+SNXUSDT,havven,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/havven/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
+ROSEUSDT,oasis-network,,,,0,429 Client Error: Too Many Requests for url: https://api.coingecko.com/api/v3/coins/oasis-network/market_chart/range?vs_currency=usd&from=1672527600&to=1703977200,2
