@@ -1,0 +1,7 @@
+,252,252,252,252,252,252,252,252
+,stock_only,random_crypto,correlation_crypto,random_subclusters_crypto,correlation_subclusters_crypto,subcluster_0_crypto,subcluster_1_crypto,subcluster_2_crypto
+annualised_return,29.58%,40.06%,35.03%,42.64%,39.02%,50.10%,37.52%,39.00%
+sharpe_annualized,1.8557,1.8195,1.4623,1.9513,1.7206,2.3368,1.6991,1.7485
+annualized_VaR,7.58,7.79,8.39,7.62,7.23,9.84,7.05,7.53
+annualized_CVaR,7.11,10.03,13.49,8.91,10.51,6.82,10.29,10.72
+annualized_volatility,0.1380,0.1975,0.2091,0.1972,0.2022,0.1972,0.1950,0.2001
